@@ -576,4 +576,6 @@
 			}(name));
 		}
 	}
+	
+	return typeChecking;
 }())));

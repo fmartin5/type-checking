@@ -1,7 +1,7 @@
 /**
  * @fileoverview typeChecking.js - A runtime type checking and assertion library.
  *
- * @formats: browser script tag, nodejs module
+ * @formats browser script tag, nodejs module
  *
  * @language syntax: es5 +const +rest - globals: es6 +console
  *
@@ -23,8 +23,8 @@
  *   {@link https://github.com/PuerkitoBio/implement.js implement.js (git) } Has duck types, custom error objects
  *   {@link https://github.com/busterjs/samsam samsam (git) }
  *   {@link https://github.com/zvictor/ArgueJS ArgueJS (git) }
- *   {@link https://github.com/sharkbrainguy/type.js Type.js (git) } Has duck types, type combinators.
- *   {@link https://github.com/mmaelzer/surely surely } Has function wrappers, an extension method, predefined type specs.
+ *   {@link https://github.com/sharkbrainguy/type.js Type.js (git) } Has duck types, type combinators
+ *   {@link https://github.com/mmaelzer/surely surely } Has function wrappers, an extension method, predefined type specs
  
  * With chained syntax (BDD assertion style):
  *
@@ -84,17 +84,17 @@
 			if(error.stack) error.stack = error.stack.split(reLines).slice(1, -numberOfStackLinesToSkip).join("\n");
 			throw error;
 		}
-	};
+	}
 	
 	typeChecking.throwNewTypeError = throwNewTypeError;
 	
-	typeChecking.isArray = 
+	typeChecking.isArray =
 					function isArray(x) {
 						return Array.isArray(x);
 					};
 	
-	// §24.1.5 'ArrayBuffer' instances each have an [[ArrayBufferData]] internal slot and an [[ArrayBufferByteLength]] internal slot.
-	typeChecking.isArrayBuffer = 
+	// 24.1.5 'ArrayBuffer' instances each have an [[ArrayBufferData]] internal slot and an [[ArrayBufferByteLength]] internal slot.
+	typeChecking.isArrayBuffer =
 					function isArrayBuffer(x) {
 						try { Reflect.getOwnPropertyDescriptor(ArrayBuffer.prototype, "byteLength").get.call(x); return true; }
 						catch(_) { return false; }
@@ -103,39 +103,35 @@
 	// Allows function objects unlike Lodash (https://lodash.com/docs#isArrayLike).
 	// @note: an object being array-like does not guarantee that all generic 'Array' methods will work on it:
 	//   some of those methods require their argument's length to be less than 2^32.
-	typeChecking.isArrayLike = 
+	typeChecking.isArrayLike =
 					function isArrayLike(x) {
 						return typeof x === "string" || (typeof x === "object" || typeof x === "function")
 						&& x !== null && Number.isSafeInteger(x.length) && x.length >= 0;
 					};
 	
-	typeChecking.isArrayLikeObject = 
+	typeChecking.isArrayLikeObject =
 					function isArrayLikeObject(x) {
 						return (typeof x === "object" || typeof x === "function")
 						&& x !== null && Number.isSafeInteger(x.length) && x.length >= 0;
 					};
 	
-	typeChecking.isBoolean = 
+	typeChecking.isBoolean =
 					function isBoolean(x) {
 						return typeof x === "boolean";
 					};
 	
-	typeChecking.isDataView = 
+	typeChecking.isDataView =
 					function isDataView(x) {
 						try { Object.getOwnPropertyDescriptor(DataView.prototype, "buffer").get.call(x); return true; } catch(_) { return false; }
 					};
-					// assert(typeChecking.isDataView(new DataView(new ArrayBuffer())))
-					// assert(!typeChecking.isDataView({[Symbol.toStringTag]: "DataView"}))
 	
-	typeChecking.isDate = 
+	typeChecking.isDate =
 					function isDate(x) {
 						try { Date.prototype.getDate.call(x); return true; } catch(_) { return false; }
 					};
-					// assert(typeChecking.isDate(new Date()))
-					// assert(!typeChecking.isDate({[Symbol.toStringTag]: "Date"}))
 	
 	// @see Duck typing https://en.wikipedia.org/wiki/Duck_typing
-	typeChecking.isDuckInstanceOf = 
+	typeChecking.isDuckInstanceOf =
 					function isDuckInstanceOf(x, object) {
 						typeChecking.expectNonPrimitive(object);
 						if(typeChecking.isPrimitive(x)) return false;
@@ -145,7 +141,7 @@
 						return true;
 					};
 	
-	typeChecking.isFormalGeneratorFunction = 
+	typeChecking.isFormalGeneratorFunction =
 					(function () {
 						const _GeneratorFunction = (function () {
 							try { return eval("(function* () {}).constructor"); } catch (_) { return null; }
@@ -157,29 +153,29 @@
 						};
 					}());
 	
-	typeChecking.isFunction = 
+	typeChecking.isFunction =
 					function isFunction(x) {
 						return typeof x === "function";
 					};
 	
-	typeChecking.isIterable = 
+	typeChecking.isIterable =
 					function isIterable(value) {
 						if(!isSymbolIteratorSupported) return false;
 						return value !== null && value !== undefined && Symbol.iterator in Object(value);
 					};
 	
-	typeChecking.isImmutable = 
+	typeChecking.isImmutable =
 					function isImmutable(value) {
 						return typeChecking.isPrimitive(value) || (Object.isSealed(value) && Object.isFrozen(value));
 					};
 	
-	typeChecking.isInteger = 
+	typeChecking.isInteger =
 					function isInteger(value) {
 						return typeof value === "number" && value % 1 === 0;
 					};
 	
 	// @see https://stackoverflow.com/questions/29924932/how-to-reliably-check-an-object-is-an-ecmascript-6-map-set
-	typeChecking.isMap = 
+	typeChecking.isMap =
 					function isMap(o) {
 						try {
 							Map.prototype.has.call(o); // throws if o is not an object or has no [[MapData]]
@@ -189,41 +185,46 @@
 						}
 					};
 	
-	typeChecking.isMutable = 
+	typeChecking.isMutable =
 					function isMutable(value) {
 						return !typeChecking.isImmutable(value);
 					};
 	
-	typeChecking.isNonPrimitive = 
+	typeChecking.isMutableArrayLikeObject =
+					function isMutableArrayLikeObject(value) {
+						return typeChecking.isArrayLikeObject(value) && !typeChecking.isImmutable(value);
+					};
+	
+	typeChecking.isNonPrimitive =
 					function isNonPrimitive(x) {
 						return !typeChecking.isPrimitive(x);
 					};
 	
-	typeChecking.isNumber = 
+	typeChecking.isNumber =
 					function isNumber(value) {
 						return typeof value === "number";
 					};
 	
-	typeChecking.isPositiveInteger = 
+	typeChecking.isPositiveInteger =
 					function isPositiveInteger(value) {
 						return typeof value === "number" && value % 1 === 0
 						&& value >= 0 && value < Number.POSITIVE_INFINITY;
 					};
 	
-	typeChecking.isPositiveNumber = 
+	typeChecking.isPositiveNumber =
 					function isPositiveNumber(value) {
 						return typeof value === "number" && value >= 0;
 					};
 	
-	typeChecking.isPrimitive = 
+	typeChecking.isPrimitive =
 					function isPrimitive(x) {
 						return x === null || x === undefined || typeof x === "boolean" || typeof x === "number" || typeof x === "string" || typeof x === "symbol";
 					};
 	
-	typeChecking.isRegExp = 
+	typeChecking.isRegExp =
 					function isRegExp(x) {
 						if(typeof Symbol === "function" && typeof Symbol.toStringTag === "symbol") try {
-							// §21.2.5.10 get RegExp.prototype.source
+							// 21.2.5.10 get RegExp.prototype.source
 							Reflect.getOwnPropertyDescriptor(RegExp.prototype, "source").get.call(x);
 							// Now 'x' is either a 'RegExp' instance or the 'RegExp.prototype' object, which is not a 'RegExp' instance.
 							return x !== RegExp.prototype;
@@ -232,9 +233,8 @@
 						}
 						return Object.prototype.toString.call(x) === "[object RegExp]";
 					};
-					// assert(typeChecking.isRegExp(/a/); assert(!typeChecking.isRegExp(RegExp.prototype));
 	
-	typeChecking.isRegularNumber = 
+	typeChecking.isRegularNumber =
 					function isRegularNumber(value) {
 						if(typeof value !== "number") return false;
 						// Checks for NaN
@@ -242,14 +242,14 @@
 						return value < Number.POSITIVE_INFINITY && value > Number.NEGATIVE_INFINITY;
 					};
 	
-	typeChecking.isSafeInteger = 
+	typeChecking.isSafeInteger =
 					function isSafeInteger(value) {
 						return typeof value === "number" && value % 1 === 0
 						&& value >= Number.MIN_SAFE_INTEGER && value <= Number.MAX_SAFE_INTEGER;
 					};
 	
 	// @see https://stackoverflow.com/questions/29924932/how-to-reliably-check-an-object-is-an-ecmascript-6-map-set
-	typeChecking.isSet = 
+	typeChecking.isSet =
 					function isSet(o) {
 						try {
 							Set.prototype.has.call(o); // throws if o is not an object or has no [[SetData]]
@@ -259,35 +259,35 @@
 						}
 					};
 	
-	// §24.1.5 'SharedArrayBuffer' instances each have an [[ArrayBufferData]] internal slot and an [[ArrayBufferByteLength]] internal slot.
-	typeChecking.isSharedArrayBuffer = 
+	// 24.1.5 'SharedArrayBuffer' instances each have an [[ArrayBufferData]] internal slot and an [[ArrayBufferByteLength]] internal slot.
+	typeChecking.isSharedArrayBuffer =
 					function isSharedArrayBuffer(x) {
 						try { Reflect.getOwnPropertyDescriptor(SharedArrayBuffer.prototype, "byteLength").get.call(x); return true; }
 						catch(_) { return false; }
 					};
 
-	typeChecking.isStrictlyPositiveInteger = 
+	typeChecking.isStrictlyPositiveInteger =
 					function isStrictlyPositiveInteger(value) {
 						return typeof value === "number" && value % 1 === 0
 						&& value > 0 && value < Number.POSITIVE_INFINITY;
 					};
 	
-	typeChecking.isStrictlyPositiveNumber = 
+	typeChecking.isStrictlyPositiveNumber =
 					function isStrictlyPositiveNumber(value) {
 						return typeof value === "number" && value > 0 && value < Number.POSITIVE_INFINITY;
 					};
 	
-	typeChecking.isString = 
+	typeChecking.isString =
 					function isString(x) {
 						return typeof x === "string";
 					};
 	
-	typeChecking.isSymbol = 
+	typeChecking.isSymbol =
 					function isSymbol(value) {
 						return typeof value === "symbol";
 					};
 		
-	typeChecking.isWeakMap = 
+	typeChecking.isWeakMap =
 					function isWeakMap(o) {
 						try {
 							WeakMap.prototype.has.call(o, {});
@@ -297,7 +297,7 @@
 						}
 					};
 	
-	typeChecking.isWeakSet = 
+	typeChecking.isWeakSet =
 					function isWeakSet(o) {
 						try {
 							WeakSet.prototype.has.call(o, {});
@@ -309,56 +309,56 @@
 	
 	// -------------
 	
-	typeChecking.expectArray = 
+	typeChecking.expectArray =
 					function expectArray(value) {
 						if(!typeChecking.isArray(value)) {
 							throwNewTypeError("an 'Array' object");
 						}
 					};
 	
-	typeChecking.expectArrayBuffer = 
+	typeChecking.expectArrayBuffer =
 					function expectArrayBuffer(value) {
 						if(!typeChecking.isArrayBuffer(value)) {
 							throwNewTypeError("an 'ArrayBuffer' object");
 						}
 					};
 	
-	typeChecking.expectArrayLike = 
+	typeChecking.expectArrayLike =
 					function expectArrayLike(value) {
 						if(!typeChecking.isArrayLike(value)) {
 							throwNewTypeError("an array-like value");
 						}
 					};
 	
-	typeChecking.expectArrayLikeObject = 
+	typeChecking.expectArrayLikeObject =
 					function expectArrayLikeObject(value) {
 						if(!typeChecking.isArrayLikeObject(value)) {
 							throwNewTypeError("an array-like object");
 						}
 					};
-		
-	typeChecking.expectBoolean = 
+	
+	typeChecking.expectBoolean =
 					function expectBoolean(value) {
 						if(!typeChecking.isBoolean(value)) {
 							throwNewTypeError("a boolean");
 						}
 					};
 	
-	typeChecking.expectDate = 
+	typeChecking.expectDate =
 					function expectDate(value) {
 						if(!typeChecking.isDate(value)) {
 							throwNewTypeError("a 'Date' object");
 						}
 					};
 	
-	typeChecking.expectDuckInstanceOf = 
+	typeChecking.expectDuckInstanceOf =
 					function expectDuckInstanceOf(value, duckType) {
 						if(!typeChecking.isDuckInstanceOf(value, duckType)) {
 							throwNewTypeError("a duck instance of the given 'duckType'");
 						}
 					};
 	
-	typeChecking.expectFunction = 
+	typeChecking.expectFunction =
 					function expectFunction(value, arity) {
 						if(typeof value !== "function") {
 							throwNewTypeError("a function");
@@ -371,70 +371,77 @@
 						}
 					};
 	
-	typeChecking.expectInstanceOf = 
+	typeChecking.expectInstanceOf =
 					function expectInstanceOf(value, ctor) {
 						if(!(value instanceof ctor)) {
 							throwNewTypeError("an instance of the given constructor");
 						}
 					};
 	
-	typeChecking.expectInteger = 
+	typeChecking.expectInteger =
 					function expectInteger(value) {
 						if(!typeChecking.isInteger(value)) {
 							throwNewTypeError("an integer");
 						}
 					};
 	
-	typeChecking.expectIterable = 
+	typeChecking.expectIterable =
 					function expectIterable(value) {
 						if(!typeChecking.isIterable(value)) {
 							throwNewTypeError("an iterable");
 						}
 					};
 	
-	typeChecking.expectMap = 
+	typeChecking.expectMap =
 					function expectMap(value) {
 						if(!typeChecking.isMap(value)) {
 							throwNewTypeError("a 'Map' object");
 						}
 					};
-		
-	typeChecking.expectNonEmptyArrayLike = 
+	
+	typeChecking.expectMutableArrayLikeObject =
+					function expectMutableArrayLikeObject(value) {
+						if(!typeChecking.isMutableArrayLikeObject(value)) {
+							throwNewTypeError("a mutable array-like object");
+						}
+					};
+	
+	typeChecking.expectNonEmptyArrayLike =
 					function expectNonEmptyArrayLike(value) {
 						if(!typeChecking.isArrayLike(value) || value.length === 0) {
 							throwNewTypeError("a non-empty array-like value");
 						}
 					};
 	
-	typeChecking.expectNonEmptyString = 
+	typeChecking.expectNonEmptyString =
 					function expectNonEmptyString(value) {
 						if(typeof value !== "string" || value === "") {
 							throwNewTypeError("a non-empty string");
 						}
 					};
 	
-	typeChecking.expectNonNull = 
+	typeChecking.expectNonNull =
 					function expectNonNull(value) {
 						if(value === null || value === undefined) {
 							throwNewTypeError("neither 'null' nor 'undefined'");
 						}
 					};
 	
-	typeChecking.expectNonPrimitive = 
+	typeChecking.expectNonPrimitive =
 					function expectNonPrimitive(value) {
 						if(typeChecking.isPrimitive(value)) {
 							throwNewTypeError("a non-primitive value");
 						}
 					};
 	
-	typeChecking.expectNumber = 
+	typeChecking.expectNumber =
 					function expectNumber(value) {
 						if(typeof value !== "number") {
 							throwNewTypeError("a number");
 						}
 					};
 	
-	typeChecking.expectOfType = 
+	typeChecking.expectOfType =
 					function expectOfType(value, type) {
 						if(!typeChecking.isOfType(value, type)) {
 							const typeName = (type.name || type);
@@ -442,77 +449,77 @@
 						}
 					};
 	
-	typeChecking.expectPositiveInteger = 
+	typeChecking.expectPositiveInteger =
 					function expectPositiveInteger(value) {
 						if(!typeChecking.isPositiveInteger(value)) {
 							throwNewTypeError("a positive integer");
 						}
 					};
 	
-	typeChecking.expectPositiveNumber = 
+	typeChecking.expectPositiveNumber =
 					function expectPositiveNumber(value) {
 						if(!typeChecking.isPositiveNumber(value)) {
 							throwNewTypeError("a positive number");
 						}
 					};
 	
-	typeChecking.expectPrimitive = 
+	typeChecking.expectPrimitive =
 					function expectPrimitive(value) {
 						if(!typeChecking.isPrimitive(value)) {
 							throwNewTypeError("a primitive value");
 						}
 					};
 	
-	typeChecking.expectRegularNumber = 
+	typeChecking.expectRegularNumber =
 					function expectRegularNumber(value) {
 						if(!typeChecking.isRegularNumber(value)) {
 							throwNewTypeError("a regular number");
 						}
 					};
 	
-	typeChecking.expectRegExp = 
+	typeChecking.expectRegExp =
 					function expectRegExp(value) {
 						if(!typeChecking.isRegExp(value)) {
 							throwNewTypeError("a 'RegExp' object");
 						}
 					};
 	
-	typeChecking.expectSafeInteger = 
+	typeChecking.expectSafeInteger =
 					function expectSafeInteger(value) {
 						if(!typeChecking.isSafeInteger(value)) {
 							throwNewTypeError("a safe integer");
 						}
 					};
 	
-	typeChecking.expectSet = 
+	typeChecking.expectSet =
 					function expectSet(value) {
 						if(!typeChecking.isSet(value)) {
 							throwNewTypeError("a 'Set' object");
 						}
 					};
 		
-	typeChecking.expectSharedArrayBuffer = 
+	typeChecking.expectSharedArrayBuffer =
 					function expectSharedArrayBuffer(value) {
 						if(!typeChecking.isSharedArrayBuffer(value)) {
 							throwNewTypeError("a 'SharedArrayBuffer' object");
 						}
 					};
 	
-	typeChecking.expectStrictlyPositiveInteger = 
+	typeChecking.expectStrictlyPositiveInteger =
 					function expectStrictlyPositiveInteger(value) {
 						if(!typeChecking.isStrictlyPositiveInteger(value)) {
 							throwNewTypeError("a strictly positive integer");
 						}
 					};
 					
-	typeChecking.expectStrictlyPositiveNumber = 
+	typeChecking.expectStrictlyPositiveNumber =
 					function expectStrictlyPositiveNumber(value) {
 						if(!typeChecking.isStrictlyPositiveNumber(value)) {
 							throwNewTypeError("a strictly positive number");
 						}
 					};
 	
-	typeChecking.expectString = 
+	typeChecking.expectString =
 					function expectString(value, length) {
 						if(typeof(value) !== "string") {
 							throwNewTypeError("a string");
@@ -525,21 +532,21 @@
 						}
 					};
 	
-	typeChecking.expectSymbol = 
+	typeChecking.expectSymbol =
 					function expectSymbol(value) {
 						if(!typeChecking.isSymbol(value)) {
 							throwNewTypeError("a symbol");
 						}
 					};
 	
-	typeChecking.expectWeakMap = 
+	typeChecking.expectWeakMap =
 					function expectWeakMap(value) {
 						if(!typeChecking.isWeaMap(value)) {
 							throwNewTypeError("a 'WeaMap' object");
 						}
 					};
 			
-	typeChecking.expectWeakSet = 
+	typeChecking.expectWeakSet =
 					function expectWeakSet(value) {
 						if(!typeChecking.isWeakSet(value)) {
 							throwNewTypeError("a 'WeakSet' object");

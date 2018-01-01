@@ -1,0 +1,19 @@
+{
+  "name": "typechecking",
+  "version": "1.0.0",
+  "description": "Runtime type checking and assertion library.",
+  "main": "typeChecking.js",
+  "scripts": {
+    "test": "mocha --ui=tdd"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fmartin5/typeChecking.git"
+  },
+  "author": "fmartin5",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fmartin5/typeChecking/issues"
+  },
+  "homepage": "https://github.com/fmartin5/typeChecking#readme"
+}

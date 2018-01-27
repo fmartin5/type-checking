@@ -162,12 +162,6 @@
 						return typeof x === "function";
 					};
 	
-	typeChecking.isIterable =
-					function isIterable(value) {
-						if(!isSymbolIteratorSupported) return false;
-						return value !== null && value !== undefined && Symbol.iterator in Object(value);
-					};
-	
 	typeChecking.isImmutable =
 					function isImmutable(value) {
 						return typeChecking.isPrimitive(value) || (Object.isSealed(value) && Object.isFrozen(value));
@@ -176,6 +170,12 @@
 	typeChecking.isInteger =
 					function isInteger(value) {
 						return typeof value === "number" && value % 1 === 0;
+					};
+	
+	typeChecking.isIterable =
+					function isIterable(value) {
+						if(!isSymbolIteratorSupported) return false;
+						return value !== null && value !== undefined && Symbol.iterator in Object(value);
 					};
 	
 	// @see https://stackoverflow.com/questions/29924932/how-to-reliably-check-an-object-is-an-ecmascript-6-map-set

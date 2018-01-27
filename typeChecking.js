@@ -445,14 +445,6 @@
 						}
 					};
 	
-	typeChecking.expectOfType =
-					function expectOfType(value, type) {
-						if(!typeChecking.isOfType(value, type)) {
-							const typeName = (type.name || type);
-							throwNewTypeError("a value of type '" + typeName);
-						}
-					};
-	
 	typeChecking.expectPositiveInteger =
 					function expectPositiveInteger(value) {
 						if(!typeChecking.isPositiveInteger(value)) {

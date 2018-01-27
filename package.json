@@ -1,5 +1,5 @@
 {
-  "name": "typechecking",
+  "name": "type-checking",
   "version": "1.0.0",
   "description": "Runtime type checking and assertion library.",
   "main": "typeChecking.js",
@@ -8,12 +8,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fmartin5/typeChecking.git"
+    "url": "git+https://github.com/fmartin5/type-checking.git"
   },
   "author": "fmartin5",
-  "license": "MIT",
+  "license": "agpl-3.0",
   "bugs": {
-    "url": "https://github.com/fmartin5/typeChecking/issues"
+    "url": "https://github.com/fmartin5/type-checking/issues"
   },
-  "homepage": "https://github.com/fmartin5/typeChecking#readme"
+  "homepage": "https://github.com/fmartin5/type-checking#readme"
 }

@@ -65,8 +65,8 @@
 	const reLines = /[\n\r]+/g;
 	
 	const areSymbolsSupported = typeof Symbol === "function";
-	const isSymbolIteratorSupported = (typeof Symbol === "function" && typeof Symbol.iterator === "symbol");
-	const isSymbolToStringTagSupported = (typeof Symbol === "function" && typeof Symbol.toStringTag === "symbol");
+	const isSymbolIteratorSupported = (areSymbolsSupported && typeof Symbol.iterator === "symbol");
+	const isSymbolToStringTagSupported = (areSymbolsSupported && typeof Symbol.toStringTag === "symbol");
 	
 	const numberOfStackLinesToSkip = (function () {
 		try {
@@ -148,7 +148,12 @@
 	typeChecking.isFormalGeneratorFunction =
 					(function () {
 						const _GeneratorFunction = (function () {
-							try { return eval("(function* () {}).constructor"); } catch (_) { return null; }
+							try {
+								// eslint-disable-next-line no-eval
+								return eval("(function* () {}).constructor");
+							} catch (_) {
+								return null;
+							}
 						}());
 						return function isFormalGeneratorFunction(x) {
 							if(!_GeneratorFunction) return false;
@@ -175,7 +180,8 @@
 	typeChecking.isIterable =
 					function isIterable(value) {
 						if(!isSymbolIteratorSupported) return false;
-						return value !== null && value !== undefined && Symbol.iterator in Object(value);
+						if(value === null || typeof value === "undefined") return false;
+						return Symbol.iterator in Object(value);
 					};
 	
 	// @see https://stackoverflow.com/questions/29924932/how-to-reliably-check-an-object-is-an-ecmascript-6-map-set
@@ -222,18 +228,20 @@
 	
 	typeChecking.isPrimitive =
 					function isPrimitive(x) {
-						return x === null || x === undefined || typeof x === "boolean" || typeof x === "number" || typeof x === "string" || typeof x === "symbol";
+						return x === null || typeof x === "undefined" || typeof x === "boolean" || typeof x === "number" || typeof x === "string" || typeof x === "symbol";
 					};
 	
 	typeChecking.isRegExp =
 					function isRegExp(x) {
-						if(typeof Symbol === "function" && typeof Symbol.toStringTag === "symbol") try {
-							// 21.2.5.10 get RegExp.prototype.source
-							Reflect.getOwnPropertyDescriptor(RegExp.prototype, "source").get.call(x);
-							// Now 'x' is either a 'RegExp' instance or the 'RegExp.prototype' object, which is not a 'RegExp' instance.
-							return x !== RegExp.prototype;
-						} catch(_) {
-							return false;
+						if(isSymbolToStringTagSupported) {
+							try {
+								// 21.2.5.10 get RegExp.prototype.source
+								Reflect.getOwnPropertyDescriptor(RegExp.prototype, "source").get.call(x);
+								// Now 'x' is either a 'RegExp' instance or the 'RegExp.prototype' object, which is not a 'RegExp' instance.
+								return x !== RegExp.prototype;
+							} catch(_) {
+								return false;
+							}
 						}
 						return Object.prototype.toString.call(x) === "[object RegExp]";
 					};
@@ -426,7 +434,7 @@
 	
 	typeChecking.expectNonNull =
 					function expectNonNull(value) {
-						if(value === null || value === undefined) {
+						if(value === null || typeof value === "undefined") {
 							throwNewTypeError("neither 'null' nor 'undefined'");
 						}
 					};
@@ -559,7 +567,9 @@
 			else if(!name.endsWith("Of")) {
 				pluralName = name + "s";
 			}
-			else continue;
+			else {
+				continue;
+			}
 			
 			// eslint-disable-next-line no-loop-func
 			(function (name) {

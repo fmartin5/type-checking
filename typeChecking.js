@@ -16,16 +16,18 @@
  * With traditional syntax (TDD assertion style):
  * 
  *   {@link https://nodejs.org/api/assert.html Node module 'assert' (node doc) }
- *   {@link https://github.com/facebook/prop-types prop-types } Has duck types, type combinators, React integration
- *   
+ *   {@link https://github.com/joyent/node-assert-plus (git) } Has support for 'process.env.NODE_NDEBUG'.
  *   {@link http://chaijs.com/api/assert/ chai.assert (doc) } Has assertions, extension API
+ *
+ *   {@link https://github.com/facebook/prop-types prop-types } Has duck types, type combinators, React integration
+ *
  *   {@link https://github.com/etcinit/ensure ensure.js (git) } Has function wrappers, record types
  *   {@link https://github.com/PuerkitoBio/implement.js implement.js (git) } Has duck types, custom error objects
  *   {@link https://github.com/busterjs/samsam samsam (git) }
  *   {@link https://github.com/zvictor/ArgueJS ArgueJS (git) }
  *   {@link https://github.com/sharkbrainguy/type.js Type.js (git) } Has duck types, type combinators
  *   {@link https://github.com/mmaelzer/surely surely } Has function wrappers, an extension method, predefined type specs
- 
+ *
  * With chained syntax (BDD assertion style):
  *
  *   {@link http://chaijs.com/api/bdd chai.should, chai.expect (doc) }

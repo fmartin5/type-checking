@@ -1,0 +1,113 @@
+{
+    "extends": "eslint:recommended",
+    "env": {
+        "es6": true
+    },
+    "globals": {
+        "console": false,
+        "SharedArrayBuffer": false
+    },
+    "rules": {
+        "array-bracket-spacing": [
+            "warn",
+            "never"
+        ],
+        "consistent-return": [
+            "warn"
+        ],
+        "curly": [
+            "warn",
+            "multi-line"
+        ],
+        "dot-location": [
+            "error",
+            "object"
+        ],
+        "eqeqeq": [
+            "error",
+            "always"
+        ],
+        "indent": [
+            "warn",
+            "tab"
+        ],
+        "linebreak-style": [
+            "off",
+            "unix"
+        ],
+        "no-alert": [
+            "error"
+        ], 
+        "no-control-regex": [
+            "warn"
+        ],
+        "no-debugger": [
+            "error"
+        ],
+        "no-eval": [
+            "error"
+        ],
+        "no-empty": [
+            "off"
+        ],
+        "no-extend-native": [
+            "error"
+        ],
+        "no-extra-semi": [
+            "error"
+        ],
+        "no-magic-numbers": [
+            "warn",
+            {                
+                "ignore": [-1, 0, 1, 2],
+                "ignoreArrayIndexes": true
+            }
+        ],
+        "no-loop-func": [
+            "warn"
+        ],
+        "no-multi-spaces": [
+            "warn",
+            {
+                "exceptions": {
+                    "Property": true,
+                    "VariableDeclarator": true
+                }
+            }
+        ],
+        "no-redeclare": [
+            "error",
+            {"builtinGlobals": true}
+        ],
+        "no-return-assign": [
+            "error",
+            "always"
+        ],
+        "no-throw-literal": [
+            "error"
+        ],
+        "no-undefined": [
+            "warn"
+        ],
+        "no-use-before-define": [
+            "warn",
+            {"functions": false, "classes": true, "variables": true}
+        ],
+        "no-useless-return": [
+            "warn"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "strict": [
+            "error",
+            "global"
+        ],
+        "wrap-iife": [
+            "error",
+            "outside",
+            {"functionPrototypeMethods": true}
+        ]
+    }
+}

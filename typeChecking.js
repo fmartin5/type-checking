@@ -67,15 +67,17 @@
 	const areSymbolsSupported = typeof Symbol === "function";
 	const isSymbolIteratorSupported = (typeof Symbol === "function" && typeof Symbol.iterator === "symbol");
 	const isSymbolToStringTagSupported = (typeof Symbol === "function" && typeof Symbol.toStringTag === "symbol");
-
-	var numberOfStackLinesToSkip = 0;
-	try {
-		throw new Error("");
-	} catch(error) {
-		if("stack" in error) {
-			numberOfStackLinesToSkip = error.stack.split(reLines).length;
+	
+	const numberOfStackLinesToSkip = (function () {
+		try {
+			throw new Error("");
+		} catch(error) {
+			if("stack" in error) {
+				return error.stack.split(reLines).length;
+			}
+			return 0;
 		}
-	}
+	}());
 	
 	function throwNewTypeError(readableTypeDescription) {
 		const msg = "expected " + readableTypeDescription + ".";

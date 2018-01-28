@@ -14,23 +14,23 @@ suite("@module typeChecking", function () {
 	suite("predicates", function () {
 		
 		const emptyArray = [];
-		const emptyArrayBuffer = new ArrayBuffer();	
+		const emptyArrayBuffer = new ArrayBuffer();
 		const emptyArrayLikeObject = {"length": 0};
-		const emptyBoolean = new Boolean();	
-		const emptyDataView = new DataView(emptyArrayBuffer);	
+		const emptyBoolean = new Boolean();
+		const emptyDataView = new DataView(emptyArrayBuffer);
 		const emptyDate = new Date();
 		const emptyError = new Error();
 		const emptyFunction = new Function();
 		const emptyGeneratorFunction = (function* () {});
 		const emptyGeneratorObject = emptyGeneratorFunction();
-		const emptyMap = new Map();	
+		const emptyMap = new Map();
 		const emptyNullObject = Object.create(null);
 		const emptyNumber = new Number();
 		const emptyPlainObject = {};
 		const emptyRegExp = new RegExp();
-		const emptySet = new Set();	
-		const emptyWeakMap = new WeakMap();	
-		const emptyWeakSet = new WeakSet();	
+		const emptySet = new Set();
+		const emptyWeakMap = new WeakMap();
+		const emptyWeakSet = new WeakSet();
 		
 		const arrayBufferObject = Object.create(ArrayBuffer.prototype);
 		const arrayObject = Object.create(Array.prototype);
@@ -61,7 +61,7 @@ suite("@module typeChecking", function () {
 		const fakeSet = {[Symbol.toStringTag]: "Set"};
 		const fakeWeakMap = {[Symbol.toStringTag]: "WeakMap"};
 		const fakeWeakSet = {[Symbol.toStringTag]: "WeakSet"};
-
+		
 		const maskedArray = Object.defineProperty([], Symbol.toStringTag, {"value": "Foo"});
 		const maskedArrayBuffer = Object.defineProperty(new ArrayBuffer(), Symbol.toStringTag, {"value": "Foo"});
 		const maskedBoolean = Object.defineProperty(new Boolean(), Symbol.toStringTag, {"value": "Foo"});
@@ -79,7 +79,7 @@ suite("@module typeChecking", function () {
 		const maskedWeakSet = Object.defineProperty(new WeakSet(), Symbol.toStringTag, {"value": "Foo"});
 		
 		const s = "abc";
-
+		
 		test("@function .isArray", function () {
 			assert.ok(tc.isArray(arrayObject) === false);
 			assert.ok(tc.isArray(emptyArray));
@@ -119,7 +119,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isArrayLikeObject(emptyPlainObject) === false);
 			assert.ok(tc.isArrayLikeObject(fakeArray) === false);
 			assert.ok(tc.isArrayLikeObject(maskedArray));
-		});		
+		});
 		
 		test("@function .isBoolean", function () {
 			assert.ok(tc.isBoolean(false));
@@ -134,7 +134,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isBoolean(null) === false);
 			assert.ok(tc.isBoolean(undefined) === false);
 			assert.ok(tc.isBoolean("") === false);
-		});		
+		});
 		
 		test("@function .isDataView", function () {
 			assert.ok(tc.isDataView(dataViewObject) === false);
@@ -175,7 +175,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isImmutable(emptyFunction) === false);
 			assert.ok(tc.isImmutable(emptyNullObject) === false);
 			assert.ok(tc.isImmutable(emptyPlainObject) === false);
-		});		
+		});
 		
 		test("@function .isIterable", function () {
 			assert.ok(tc.isIterable(emptyArray));
@@ -189,15 +189,119 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isIterable(emptySet));
 			assert.ok(tc.isIterable(emptyWeakMap) === false);
 			assert.ok(tc.isIterable(emptyWeakSet) === false);
-
-
+			
 			assert.ok(tc.isIterable(arrayObject));
 			assert.ok(tc.isIterable(functionObject) === false);
 			assert.ok(tc.isIterable(regExpObject) === false);
 			assert.ok(tc.isIterable(maskedArray));
 			assert.ok(tc.isIterable(maskedArrayBuffer) === false);
 			assert.ok(tc.isIterable(maskedFunction) === false);
-		});		
-
+		});
+		
+		test("@function .isMap", function () {
+			assert.ok(tc.isMap(emptyMap));
+			assert.ok(tc.isMap(fakeMap) === false);
+			assert.ok(tc.isMap(mapObject) === false);
+			assert.ok(tc.isMap(maskedMap));
+			
+			assert.ok(tc.isMap(emptyPlainObject) === false);
+			assert.ok(tc.isMap(emptySet) === false);
+			assert.ok(tc.isMap(emptyWeakMap) === false);
+			assert.ok(tc.isMap(weakMapObject) === false);
+		});
+		
+		test("@function .isNumber", function () {
+			assert.ok(tc.isNumber(0));
+			assert.ok(tc.isNumber(-0));
+			assert.ok(tc.isNumber(1));
+			assert.ok(tc.isNumber(-1));
+			assert.ok(tc.isNumber(Math.PI));
+			assert.ok(tc.isNumber(NaN));
+			assert.ok(tc.isNumber(Infinity));
+			assert.ok(tc.isNumber(-Infinity));
+			
+			assert.ok(tc.isNumber(false) === false);
+			assert.ok(tc.isNumber(true) === false);
+			assert.ok(tc.isNumber("1") === false);
+			assert.ok(tc.isNumber(booleanObject) === false);
+			assert.ok(tc.isNumber(numberObject) === false);
+			assert.ok(tc.isNumber(null) === false);
+			assert.ok(tc.isNumber(undefined) === false);
+			assert.ok(tc.isNumber("") === false);
+		});
+		
+		test("@function .isPositiveInteger", function () {
+			assert.ok(tc.isPositiveInteger(0));
+			assert.ok(tc.isPositiveInteger(-0) === false);
+			assert.ok(tc.isPositiveInteger(1));
+			assert.ok(tc.isPositiveInteger(-1) === false);
+			assert.ok(tc.isNumber(Math.PI) === false);
+			assert.ok(tc.isPositiveInteger(NaN) === false);
+			assert.ok(tc.isPositiveInteger(Infinity) === false);
+			assert.ok(tc.isPositiveInteger(-Infinity) === false);
+			
+			assert.ok(tc.isPositiveInteger(false) === false);
+			assert.ok(tc.isPositiveInteger(true) === false);
+			assert.ok(tc.isPositiveInteger("1") === false);
+			assert.ok(tc.isPositiveInteger(booleanObject) === false);
+			assert.ok(tc.isPositiveInteger(numberObject) === false);
+			assert.ok(tc.isPositiveInteger(null) === false);
+			assert.ok(tc.isPositiveInteger(undefined) === false);
+			assert.ok(tc.isPositiveInteger("") === false);
+		});
+		
+		test("@function .isPositiveNumber", function () {
+			assert.ok(tc.isPositiveNumber(0));
+			assert.ok(tc.isPositiveNumber(-0) === false);
+			assert.ok(tc.isPositiveNumber(1));
+			assert.ok(tc.isPositiveNumber(-1) === false);
+			assert.ok(tc.isNumber(Math.PI));
+			assert.ok(tc.isPositiveNumber(NaN) === false);
+			assert.ok(tc.isPositiveNumber(Infinity));
+			assert.ok(tc.isPositiveNumber(-Infinity) === false);
+			
+			assert.ok(tc.isPositiveNumber(false) === false);
+			assert.ok(tc.isPositiveNumber(true) === false);
+			assert.ok(tc.isPositiveNumber("1") === false);
+			assert.ok(tc.isPositiveNumber(booleanObject) === false);
+			assert.ok(tc.isPositiveNumber(numberObject) === false);
+			assert.ok(tc.isPositiveNumber(null) === false);
+			assert.ok(tc.isPositiveNumber(undefined) === false);
+			assert.ok(tc.isPositiveNumber("") === false);
+		});
+		
+		test("@function .isPrimitive", function () {
+			assert.ok(tc.isPrimitive(false));
+			assert.ok(tc.isPrimitive(true));
+			assert.ok(tc.isPrimitive(0));
+			assert.ok(tc.isPrimitive(1));
+			assert.ok(tc.isPrimitive(Math.PI));
+			assert.ok(tc.isPrimitive(NaN));
+			assert.ok(tc.isPrimitive(Infinity));
+			assert.ok(tc.isPrimitive(-Infinity));
+			assert.ok(tc.isPrimitive("false"));
+			assert.ok(tc.isPrimitive("true"));
+			assert.ok(tc.isPrimitive(emptyArray) === false);
+			assert.ok(tc.isPrimitive(emptyBoolean) === false);
+			assert.ok(tc.isPrimitive(emptyNumber) === false);
+			assert.ok(tc.isPrimitive(emptyPlainObject) === false);
+			assert.ok(tc.isPrimitive(null));
+			assert.ok(tc.isPrimitive(undefined));
+			assert.ok(tc.isPrimitive(""));
+		});
+		
+		
+		test("@function .isSet", function () {
+			assert.ok(tc.isSet(emptySet));
+			assert.ok(tc.isSet(fakeSet) === false);
+			assert.ok(tc.isSet(mapObject) === false);
+			assert.ok(tc.isSet(maskedSet));
+			
+			assert.ok(tc.isSet(emptyPlainObject) === false);
+			assert.ok(tc.isSet(emptyMap) === false);
+			assert.ok(tc.isSet(emptyWeakSet) === false);
+			assert.ok(tc.isSet(weakSetObject) === false);
+		});
+		
 	});
 });

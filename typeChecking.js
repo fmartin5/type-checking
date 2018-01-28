@@ -135,8 +135,8 @@
 					};
 	
 	// @see Duck typing https://en.wikipedia.org/wiki/Duck_typing
-	typeChecking.isDuckInstanceOf =
-					function isDuckInstanceOf(x, object) {
+	typeChecking.isDuckOf =
+					function isDuckOf(x, object) {
 						typeChecking.expectNonPrimitive(object);
 						if(typeChecking.isPrimitive(x)) return false;
 						for(var i in object) {
@@ -363,10 +363,10 @@
 						}
 					};
 	
-	typeChecking.expectDuckInstanceOf =
-					function expectDuckInstanceOf(value, duckType) {
-						if(!typeChecking.isDuckInstanceOf(value, duckType)) {
-							throwNewTypeError("a duck instance of the given 'duckType'");
+	typeChecking.expectDuckOf =
+					function expectDuckOf(value, duckType) {
+						if(!typeChecking.isDuckOf(value, duckType)) {
+							throwNewTypeError("a duck of the given 'duckType'");
 						}
 					};
 	

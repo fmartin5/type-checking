@@ -1,6 +1,6 @@
 {
   "name": "@fmartin5/type-checking",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Runtime type checking and assertion library.",
   "main": "typeChecking.js",
   "scripts": {

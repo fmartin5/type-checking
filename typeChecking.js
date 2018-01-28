@@ -218,12 +218,12 @@
 	typeChecking.isPositiveInteger =
 					function isPositiveInteger(value) {
 						return typeof value === "number" && value % 1 === 0
-						&& value >= 0 && value < Number.POSITIVE_INFINITY;
+						&& value >= 0 && value < Number.POSITIVE_INFINITY && !Object.is(value, -0);
 					};
 	
 	typeChecking.isPositiveNumber =
 					function isPositiveNumber(value) {
-						return typeof value === "number" && value >= 0;
+						return typeof value === "number" && value >= 0 && !Object.is(value, -0);
 					};
 	
 	typeChecking.isPrimitive =

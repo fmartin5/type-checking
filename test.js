@@ -235,7 +235,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isPositiveInteger(-0) === false);
 			assert.ok(tc.isPositiveInteger(1));
 			assert.ok(tc.isPositiveInteger(-1) === false);
-			assert.ok(tc.isNumber(Math.PI) === false);
+			assert.ok(tc.isPositiveInteger(Math.PI) === false);
 			assert.ok(tc.isPositiveInteger(NaN) === false);
 			assert.ok(tc.isPositiveInteger(Infinity) === false);
 			assert.ok(tc.isPositiveInteger(-Infinity) === false);
@@ -255,7 +255,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isPositiveNumber(-0) === false);
 			assert.ok(tc.isPositiveNumber(1));
 			assert.ok(tc.isPositiveNumber(-1) === false);
-			assert.ok(tc.isNumber(Math.PI));
+			assert.ok(tc.isPositiveNumber(Math.PI));
 			assert.ok(tc.isPositiveNumber(NaN) === false);
 			assert.ok(tc.isPositiveNumber(Infinity));
 			assert.ok(tc.isPositiveNumber(-Infinity) === false);

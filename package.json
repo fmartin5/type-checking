@@ -4,7 +4,7 @@
   "description": "Runtime type checking and assertion library.",
   "main": "typeChecking.js",
   "scripts": {
-    "test": "mocha --ui=tdd"
+    "test": "eslint typeChecking.js && mocha --ui=tdd"
   },
   "repository": {
     "type": "git",

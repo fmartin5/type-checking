@@ -558,7 +558,7 @@
 	
 	typeChecking.expectWeakMap =
 					function expectWeakMap(value) {
-						if(!typeChecking.isWeaMap(value)) {
+						if(!typeChecking.isWeakMap(value)) {
 							throwNewTypeError("a 'WeaMap' object");
 						}
 					};

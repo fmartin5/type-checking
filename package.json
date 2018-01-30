@@ -1,19 +1,32 @@
 {
   "name": "@fmartin5/type-checking",
   "version": "1.0.1",
-  "description": "Runtime type checking and assertion library.",
+  "description": "Runtime type checking and type assertion library for Node and the browser",
+  "keywords": [
+    "assertion",
+	"assertions",
+	"runtime",
+	"type-checking",
+	"typechecking",
+	"browser",
+	"nashorn"  
+  ],
+  "devDependencies": {
+    "eslint": "^4.13.1",
+	"mocha": "^5.0.0"
+  },
   "main": "typeChecking.js",
   "scripts": {
-    "test": "eslint typeChecking.js && mocha --ui=tdd"
+    "test": "eslint typeChecking.js && echo '✔  Your code looks good.' && mocha --ui=tdd"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fmartin5/type-checking.git"
   },
   "author": "fmartin5",
-  "license": "agpl-3.0",
   "bugs": {
     "url": "https://github.com/fmartin5/type-checking/issues"
   },
-  "homepage": "https://github.com/fmartin5/type-checking#readme"
+  "homepage": "https://github.com/fmartin5/type-checking#readme",
+  "license": "AGPL-3.0"
 }

@@ -62,6 +62,32 @@ suite("@module typeChecking", function () {
 		const fakeWeakMap = {[Symbol.toStringTag]: "WeakMap"};
 		const fakeWeakSet = {[Symbol.toStringTag]: "WeakSet"};
 		
+		const vm = require("vm");
+		const sandbox = Object.create(null);
+		vm.createContext(sandbox);
+		
+		const foreignEmptyArray = vm.runInContext("[]", sandbox);
+		const foreignEmptyArrayBuffer = vm.runInContext("new ArrayBuffer()", sandbox);
+		const foreignEmptyArrayLikeObject = vm.runInContext("({length: 0})", sandbox);
+		const foreignEmptyBoolean = vm.runInContext("new Boolean()", sandbox);
+		const foreignEmptyDataView = vm.runInContext("new DataView(new ArrayBuffer())", sandbox);
+		const foreignEmptyDate = vm.runInContext("new Date()", sandbox);
+		const foreignEmptyError = vm.runInContext("new Error()", sandbox);
+		const foreignEmptyFunction = vm.runInContext("new Function()", sandbox);
+		const foreignEmptyGeneratorFunction = vm.runInContext("(function* () {})", sandbox);
+		const foreignEmptyGeneratorObject = vm.runInContext("(function* () {})()", sandbox);
+		const foreignEmptyMap = vm.runInContext("new Map()", sandbox);
+		const foreignEmptyNullObject = vm.runInContext("Object.create(null)", sandbox);
+		const foreignEmptyNumber = vm.runInContext("new Number()", sandbox);
+		const foreignEmptyPlainObject = vm.runInContext("{}", sandbox);
+		const foreignEmptyRegExp = vm.runInContext("new RegExp()", sandbox);
+		const foreignEmptySet = vm.runInContext("new Set()", sandbox);
+		const foreignEmptyWeakMap = vm.runInContext("new WeakMap()", sandbox);
+		const foreignEmptyWeakSet = vm.runInContext("new WeakSet()", sandbox);		
+
+		const foreignEmptyString = vm.runInContext("('')", sandbox);
+		const foreignRexExpPrototype = vm.runInContext("RegExp.prototype", sandbox);
+		
 		const maskedArray = Object.defineProperty([], Symbol.toStringTag, {"value": "Foo"});
 		const maskedArrayBuffer = Object.defineProperty(new ArrayBuffer(), Symbol.toStringTag, {"value": "Foo"});
 		const maskedBoolean = Object.defineProperty(new Boolean(), Symbol.toStringTag, {"value": "Foo"});
@@ -92,6 +118,8 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isArray(emptyRegExp) === false);
 			assert.ok(tc.isArray(fakeArray) === false);
 			assert.ok(tc.isArray(maskedArray));
+			
+			assert.ok(tc.isArray(foreignEmptyArray));
 		});
 		
 		test("@function .isArrayBuffer", function () {
@@ -101,6 +129,8 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isArrayBuffer(emptyPlainObject) === false);
 			assert.ok(tc.isArrayBuffer(fakeArrayBuffer) === false);
 			assert.ok(tc.isArrayBuffer(maskedArrayBuffer));
+
+			assert.ok(tc.isArrayBuffer(foreignEmptyArrayBuffer));
 		});
 		
 		test("@function .isArrayLike", function () {
@@ -110,6 +140,10 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isArrayLike(emptyPlainObject) === false);
 			assert.ok(tc.isArrayLike(fakeArray) === false);
 			assert.ok(tc.isArrayLike(maskedArray));
+
+			assert.ok(tc.isArrayLike(foreignEmptyArray));
+			assert.ok(tc.isArrayLike(foreignEmptyArrayLikeObject));
+			assert.ok(tc.isArrayLike(foreignEmptyString));
 		});
 		
 		test("@function .isArrayLikeObject", function () {
@@ -119,6 +153,10 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isArrayLikeObject(emptyPlainObject) === false);
 			assert.ok(tc.isArrayLikeObject(fakeArray) === false);
 			assert.ok(tc.isArrayLikeObject(maskedArray));
+			
+			assert.ok(tc.isArrayLikeObject(foreignEmptyArray));
+			assert.ok(tc.isArrayLikeObject(foreignEmptyArrayLikeObject));
+			assert.ok(tc.isArrayLikeObject(foreignEmptyString) === false);
 		});
 		
 		test("@function .isBoolean", function () {
@@ -142,6 +180,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isDataView(emptyDataView));
 			assert.ok(tc.isDataView(fakeDataView) === false);
 			assert.ok(tc.isDataView(maskedDataView));
+			assert.ok(tc.isDataView(foreignEmptyDataView));
 		});
 		
 		test("@function .isDate", function () {
@@ -151,6 +190,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isDate(maskedDate));
 			assert.ok(tc.isDate(0) === false);
 			assert.ok(tc.isDate("Monday") === false);
+			assert.ok(tc.isDate(foreignEmptyDate));
 		});		
 		
 		test("@function .isFormalGeneratorFunction", function () {
@@ -158,6 +198,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isFormalGeneratorFunction(emptyGeneratorFunction));
 			assert.ok(tc.isFormalGeneratorFunction(emptyGeneratorObject) === false);
 			assert.ok(tc.isFormalGeneratorFunction(functionObject) === false);
+			assert.ok(tc.isFormalGeneratorFunction(foreignEmptyGeneratorFunction));
 		});		
 		
 		test("@function .isFunction", function () {
@@ -166,6 +207,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isFunction(fakeFunction) === false);
 			assert.ok(tc.isFunction(functionObject) === false);
 			assert.ok(tc.isFunction(maskedFunction));
+			assert.ok(tc.isFunction(foreignEmptyFunction));
 		});		
 		
 		test("@function .isImmutable", function () {
@@ -208,6 +250,8 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isMap(emptySet) === false);
 			assert.ok(tc.isMap(emptyWeakMap) === false);
 			assert.ok(tc.isMap(weakMapObject) === false);
+			
+			assert.ok(tc.isMap(foreignEmptyMap));
 		});
 		
 		test("@function .isNumber", function () {
@@ -301,6 +345,8 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isSet(emptyMap) === false);
 			assert.ok(tc.isSet(emptyWeakSet) === false);
 			assert.ok(tc.isSet(weakSetObject) === false);
+			
+			assert.ok(tc.isSet(foreignEmptySet));
 		});
 		
 	});

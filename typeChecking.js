@@ -73,19 +73,32 @@
 			throw new Error("");
 		} catch(error) {
 			if("stack" in error) {
-				return error.stack.split(reLines).length;
+				// Subtracting '1' since the first line does not describe a stack frame.
+				return error.stack.split(reLines).length - 1;
 			}
 			return 0;
 		}
 	}());
 	
 	function throwNewTypeError(readableTypeDescription) {
+		if(typeof readableTypeDescription !== "string" || readableTypeDescription === "") {
+			// Do not modify the 'stack' property in this case.
+			throw new TypeError("expected something else than what was provided. Also, 'typeChecking.throwNewTypeError()' was not called correctly (it expected a non-empty string).");
+		}
 		const msg = "expected " + readableTypeDescription + ".";
 		const error = new TypeError(msg);
 		try {
 			throw error;
 		} catch(error) {
-			if(error.stack) error.stack = error.stack.split(reLines).slice(1, -numberOfStackLinesToSkip).join("\n");
+			if("stack" in error) {
+				const newStack = error.stack.split(reLines).slice(0, -numberOfStackLinesToSkip).join("\n");
+				Object.defineProperty(error, "stack", {
+					'value': newStack,
+					'configurable': true,
+					'enumerable': false,
+					'writable': true
+				});
+			}
 			throw error;
 		}
 	}

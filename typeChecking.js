@@ -71,7 +71,8 @@
 	const numberOfStackLinesToSkip = (function () {
 		try {
 			throw new Error("");
-		} catch(error) {
+		}
+		catch(error) {
 			if("stack" in error) {
 				// Subtracting '1' since the first line does not describe a stack frame.
 				return error.stack.split(reLines).length - 1;
@@ -89,7 +90,8 @@
 		const error = new TypeError(msg);
 		try {
 			throw error;
-		} catch(error) {
+		}
+		catch(error) {
 			if("stack" in error) {
 				const newStack = error.stack.split(reLines).slice(0, -numberOfStackLinesToSkip).join("\n");
 				Object.defineProperty(error, "stack", {
@@ -113,8 +115,13 @@
 	// 24.1.5 'ArrayBuffer' instances each have an [[ArrayBufferData]] internal slot and an [[ArrayBufferByteLength]] internal slot.
 	typeChecking.isArrayBuffer =
 					function isArrayBuffer(x) {
-						try { Reflect.getOwnPropertyDescriptor(ArrayBuffer.prototype, "byteLength").get.call(x); return true; }
-						catch(_) { return false; }
+						try {
+							Reflect.getOwnPropertyDescriptor(ArrayBuffer.prototype, "byteLength").get.call(x);
+							return true;
+						}
+						catch(_) {
+							return false;
+						}
 					};
 	
 	// Allows function objects unlike Lodash (https://lodash.com/docs#isArrayLike).
@@ -139,12 +146,24 @@
 	
 	typeChecking.isDataView =
 					function isDataView(x) {
-						try { Object.getOwnPropertyDescriptor(DataView.prototype, "buffer").get.call(x); return true; } catch(_) { return false; }
+						try {
+							Object.getOwnPropertyDescriptor(DataView.prototype, "buffer").get.call(x);
+							return true; 
+						}
+						catch(_) {
+							return false;
+						}
 					};
 	
 	typeChecking.isDate =
 					function isDate(x) {
-						try { Date.prototype.getDate.call(x); return true; } catch(_) { return false; }
+						try {
+							Date.prototype.getDate.call(x);
+							return true;
+						}
+						catch(_) {
+							return false;
+						}
 					};
 	
 	// @see Duck typing https://en.wikipedia.org/wiki/Duck_typing
@@ -164,7 +183,8 @@
 							try {
 								// eslint-disable-next-line no-eval
 								return eval("(function* () {}).constructor");
-							} catch (_) {
+							}
+							catch (_) {
 								return null;
 							}
 						}());
@@ -203,7 +223,8 @@
 						try {
 							Map.prototype.has.call(o); // throws if o is not an object or has no [[MapData]]
 							return true;
-						} catch(_) {
+						}
+						catch(_) {
 							return false;
 						}
 					};
@@ -252,7 +273,8 @@
 								Reflect.getOwnPropertyDescriptor(RegExp.prototype, "source").get.call(x);
 								// Now 'x' is either a 'RegExp' instance or the 'RegExp.prototype' object, which is not a 'RegExp' instance.
 								return x !== RegExp.prototype;
-							} catch(_) {
+							}
+							catch(_) {
 								return false;
 							}
 						}
@@ -279,7 +301,8 @@
 						try {
 							Set.prototype.has.call(o); // throws if o is not an object or has no [[SetData]]
 							return true;
-						} catch(_) {
+						}
+						catch(_) {
 							return false;
 						}
 					};
@@ -287,8 +310,13 @@
 	// 24.1.5 'SharedArrayBuffer' instances each have an [[ArrayBufferData]] internal slot and an [[ArrayBufferByteLength]] internal slot.
 	typeChecking.isSharedArrayBuffer =
 					function isSharedArrayBuffer(x) {
-						try { Reflect.getOwnPropertyDescriptor(SharedArrayBuffer.prototype, "byteLength").get.call(x); return true; }
-						catch(_) { return false; }
+						try {
+							Reflect.getOwnPropertyDescriptor(SharedArrayBuffer.prototype, "byteLength").get.call(x);
+							return true;
+						}
+						catch(_) {
+							return false;
+						}
 					};
 
 	typeChecking.isStrictlyPositiveInteger =
@@ -317,7 +345,8 @@
 						try {
 							WeakMap.prototype.has.call(o, {});
 							return true;
-						} catch(_) {
+						} 
+						catch(_) {
 							return false;
 						}
 					};
@@ -327,7 +356,8 @@
 						try {
 							WeakSet.prototype.has.call(o, {});
 							return true;
-						} catch(_) {
+						}
+						catch(_) {
 							return false;
 						}
 					};

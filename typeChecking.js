@@ -62,6 +62,8 @@
 	
 	const typeChecking = Object.create(null);
 	
+	typeChecking.disabled = false;
+	
 	const reLines = /[\n\r]+/g;
 	
 	const areSymbolsSupported = typeof Symbol === "function";
@@ -366,6 +368,7 @@
 	
 	typeChecking.expectArray =
 					function expectArray(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isArray(value)) {
 							throwNewTypeError("an 'Array' object");
 						}
@@ -373,6 +376,7 @@
 	
 	typeChecking.expectArrayBuffer =
 					function expectArrayBuffer(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isArrayBuffer(value)) {
 							throwNewTypeError("an 'ArrayBuffer' object");
 						}
@@ -380,6 +384,7 @@
 	
 	typeChecking.expectArrayLike =
 					function expectArrayLike(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isArrayLike(value)) {
 							throwNewTypeError("an array-like value");
 						}
@@ -387,6 +392,7 @@
 	
 	typeChecking.expectArrayLikeObject =
 					function expectArrayLikeObject(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isArrayLikeObject(value)) {
 							throwNewTypeError("an array-like object");
 						}
@@ -394,6 +400,7 @@
 	
 	typeChecking.expectBoolean =
 					function expectBoolean(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isBoolean(value)) {
 							throwNewTypeError("a boolean");
 						}
@@ -401,6 +408,7 @@
 	
 	typeChecking.expectDate =
 					function expectDate(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isDate(value)) {
 							throwNewTypeError("a 'Date' object");
 						}
@@ -408,6 +416,7 @@
 	
 	typeChecking.expectDuckOf =
 					function expectDuckOf(value, duckType) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isDuckOf(value, duckType)) {
 							throwNewTypeError("a duck of the given 'duckType'");
 						}
@@ -415,6 +424,7 @@
 	
 	typeChecking.expectFunction =
 					function expectFunction(value, arity) {
+						if(typeChecking.disabled) return;
 						if(typeof value !== "function") {
 							throwNewTypeError("a function");
 						}
@@ -428,6 +438,7 @@
 	
 	typeChecking.expectInstanceOf =
 					function expectInstanceOf(value, ctor) {
+						if(typeChecking.disabled) return;
 						if(!(value instanceof ctor)) {
 							throwNewTypeError("an instance of the given constructor");
 						}
@@ -435,6 +446,7 @@
 	
 	typeChecking.expectInteger =
 					function expectInteger(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isInteger(value)) {
 							throwNewTypeError("an integer");
 						}
@@ -442,6 +454,7 @@
 	
 	typeChecking.expectIterable =
 					function expectIterable(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isIterable(value)) {
 							throwNewTypeError("an iterable");
 						}
@@ -449,6 +462,7 @@
 	
 	typeChecking.expectMap =
 					function expectMap(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isMap(value)) {
 							throwNewTypeError("a 'Map' object");
 						}
@@ -456,6 +470,7 @@
 	
 	typeChecking.expectMutableArrayLikeObject =
 					function expectMutableArrayLikeObject(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isMutableArrayLikeObject(value)) {
 							throwNewTypeError("a mutable array-like object");
 						}
@@ -463,6 +478,7 @@
 	
 	typeChecking.expectNonEmptyArrayLike =
 					function expectNonEmptyArrayLike(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isArrayLike(value) || value.length === 0) {
 							throwNewTypeError("a non-empty array-like value");
 						}
@@ -470,6 +486,7 @@
 	
 	typeChecking.expectNonEmptyString =
 					function expectNonEmptyString(value) {
+						if(typeChecking.disabled) return;
 						if(typeof value !== "string" || value === "") {
 							throwNewTypeError("a non-empty string");
 						}
@@ -477,6 +494,7 @@
 	
 	typeChecking.expectNonNull =
 					function expectNonNull(value) {
+						if(typeChecking.disabled) return;
 						if(value === null || typeof value === "undefined") {
 							throwNewTypeError("neither 'null' nor 'undefined'");
 						}
@@ -484,6 +502,7 @@
 	
 	typeChecking.expectNonPrimitive =
 					function expectNonPrimitive(value) {
+						if(typeChecking.disabled) return;
 						if(typeChecking.isPrimitive(value)) {
 							throwNewTypeError("a non-primitive value");
 						}
@@ -491,6 +510,7 @@
 	
 	typeChecking.expectNumber =
 					function expectNumber(value) {
+						if(typeChecking.disabled) return;
 						if(typeof value !== "number") {
 							throwNewTypeError("a number");
 						}
@@ -498,6 +518,7 @@
 	
 	typeChecking.expectPositiveInteger =
 					function expectPositiveInteger(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isPositiveInteger(value)) {
 							throwNewTypeError("a positive integer");
 						}
@@ -505,6 +526,7 @@
 	
 	typeChecking.expectPositiveNumber =
 					function expectPositiveNumber(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isPositiveNumber(value)) {
 							throwNewTypeError("a positive number");
 						}
@@ -512,6 +534,7 @@
 	
 	typeChecking.expectPrimitive =
 					function expectPrimitive(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isPrimitive(value)) {
 							throwNewTypeError("a primitive value");
 						}
@@ -519,6 +542,7 @@
 	
 	typeChecking.expectRegularNumber =
 					function expectRegularNumber(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isRegularNumber(value)) {
 							throwNewTypeError("a regular number");
 						}
@@ -526,6 +550,7 @@
 	
 	typeChecking.expectRegExp =
 					function expectRegExp(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isRegExp(value)) {
 							throwNewTypeError("a 'RegExp' object");
 						}
@@ -533,6 +558,7 @@
 	
 	typeChecking.expectSafeInteger =
 					function expectSafeInteger(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isSafeInteger(value)) {
 							throwNewTypeError("a safe integer");
 						}
@@ -540,6 +566,7 @@
 	
 	typeChecking.expectSet =
 					function expectSet(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isSet(value)) {
 							throwNewTypeError("a 'Set' object");
 						}
@@ -547,6 +574,7 @@
 		
 	typeChecking.expectSharedArrayBuffer =
 					function expectSharedArrayBuffer(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isSharedArrayBuffer(value)) {
 							throwNewTypeError("a 'SharedArrayBuffer' object");
 						}
@@ -554,6 +582,7 @@
 	
 	typeChecking.expectStrictlyPositiveInteger =
 					function expectStrictlyPositiveInteger(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isStrictlyPositiveInteger(value)) {
 							throwNewTypeError("a strictly positive integer");
 						}
@@ -561,6 +590,7 @@
 					
 	typeChecking.expectStrictlyPositiveNumber =
 					function expectStrictlyPositiveNumber(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isStrictlyPositiveNumber(value)) {
 							throwNewTypeError("a strictly positive number");
 						}
@@ -568,6 +598,7 @@
 	
 	typeChecking.expectString =
 					function expectString(value, length) {
+						if(typeChecking.disabled) return;
 						if(typeof(value) !== "string") {
 							throwNewTypeError("a string");
 						}
@@ -581,6 +612,7 @@
 	
 	typeChecking.expectSymbol =
 					function expectSymbol(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isSymbol(value)) {
 							throwNewTypeError("a symbol");
 						}
@@ -588,6 +620,7 @@
 	
 	typeChecking.expectWeakMap =
 					function expectWeakMap(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isWeakMap(value)) {
 							throwNewTypeError("a 'WeakMap' object");
 						}
@@ -595,6 +628,7 @@
 			
 	typeChecking.expectWeakSet =
 					function expectWeakSet(value) {
+						if(typeChecking.disabled) return;
 						if(!typeChecking.isWeakSet(value)) {
 							throwNewTypeError("a 'WeakSet' object");
 						}
@@ -617,6 +651,7 @@
 			// eslint-disable-next-line no-loop-func
 			(function (name) {
 				typeChecking[pluralName] = (function (values, ...args) {
+					if(typeChecking.disabled) return;
 					typeChecking.expectArrayLikeObject(values);
 					for(var value of values) {
 						typeChecking[name](value, ...args);
@@ -626,6 +661,7 @@
 				const optionalName = "expectOptional" + name.slice("expect".length);
 				
 				typeChecking[optionalName] = (function (value) {
+					if(typeChecking.disabled) return;
 					if(typeof value === 'undefined') return;
 					typeChecking[name](value);
 				});

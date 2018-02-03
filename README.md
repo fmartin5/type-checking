@@ -16,7 +16,7 @@ Runtime type checking and type assertion library for Node and the browser
 - Does not aim to cover any DOM API type.
 - Does not aim to cover complex constrained string types like email address etc.
 - Does not aim to offer custom type constructor.
-- Aims to provide readable error messages: automatically skips irrelevant lines of the stack trace related to engine internal functions.
+- Aims to provide readable error messages.
 
 - Does not rely on Symbol.toStringTag
 

@@ -216,6 +216,17 @@
 						return typeChecking.isArrayLikeObject(value) && !typeChecking.isImmutable(value);
 					};
 	
+	typeChecking.isNegativeInteger =
+					function isNegativeInteger(value) {
+						return typeof value === "number" && value % 1 === 0
+						&& value <= 0 && value > Number.NEGATIVE_INFINITY && !Object.is(value, 0);
+					};
+	
+	typeChecking.isNegativeNumber =
+					function isNegativeNumber(value) {
+						return typeof value === "number" && value <= 0 && !Object.is(value, 0);
+					};
+	
 	typeChecking.isNonPrimitive =
 					function isNonPrimitive(x) {
 						return !typeChecking.isPrimitive(x);
@@ -295,7 +306,18 @@
 							return false;
 						}
 					};
-
+	
+	typeChecking.isStrictlyNegativeInteger =
+					function isStrictlyNegativeInteger(value) {
+						return typeof value === "number" && value % 1 === 0
+						&& value < 0 && value > Number.NEGATIVE_INFINITY;
+					};
+	
+	typeChecking.isStrictlyNegativeNumber =
+					function isStrictlyNegativeNumber(value) {
+						return typeof value === "number" && value < 0;
+					};
+	
 	typeChecking.isStrictlyPositiveInteger =
 					function isStrictlyPositiveInteger(value) {
 						return typeof value === "number" && value % 1 === 0

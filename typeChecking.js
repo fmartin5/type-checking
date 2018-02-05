@@ -227,6 +227,11 @@
 						return typeof value === "number" && value <= 0 && !Object.is(value, 0);
 					};
 	
+	typeChecking.isNonEmptyString =
+					function isNonEmptyString(arg) {
+						return typeof arg === "string" && arg !== "";
+					};
+	
 	typeChecking.isNonPrimitive =
 					function isNonPrimitive(x) {
 						return !typeChecking.isPrimitive(x);

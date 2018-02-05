@@ -294,6 +294,26 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isNegativeNumber("") === false);
 		});
 		
+		test("@function .isNonEmptyString", function () {
+			assert.ok(tc.isNonEmptyString(0) === false);
+			assert.ok(tc.isNonEmptyString("") === false);
+			assert.ok(tc.isNonEmptyString("abc"));
+			assert.ok(tc.isNonEmptyString([""]) === false);
+			assert.ok(tc.isNonEmptyString(["a", "b"]) === false);
+			assert.ok(tc.isNonEmptyString(["abc"]) === false);
+			assert.ok(tc.isNonEmptyString({'toString': () => ""}) === false);
+			assert.ok(tc.isNonEmptyString({'toString': () => "abc"}) === false);
+			
+			assert.ok(tc.isNonEmptyString(false) === false);
+			assert.ok(tc.isNonEmptyString(true) === false);
+			assert.ok(tc.isNonEmptyString(" "));
+			assert.ok(tc.isNonEmptyString("\x00"));
+			assert.ok(tc.isNonEmptyString(booleanObject) === false);
+			assert.ok(tc.isNonEmptyString(numberObject) === false);
+			assert.ok(tc.isNonEmptyString(null) === false);
+			assert.ok(tc.isNonEmptyString(undefined) === false);
+		});
+		
 		test("@function .isNumber", function () {
 			assert.ok(tc.isNumber(0));
 			assert.ok(tc.isNumber(-0));

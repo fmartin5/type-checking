@@ -341,7 +341,7 @@
 	
 	typeChecking.isStrictlyPositiveNumber =
 					function isStrictlyPositiveNumber(value) {
-						return typeof value === "number" && value > 0 && value < Number.POSITIVE_INFINITY;
+						return typeof value === "number" && value > 0;
 					};
 	
 	typeChecking.isString =

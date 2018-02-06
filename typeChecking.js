@@ -227,6 +227,16 @@
 						return typeof value === "number" && value <= 0 && !Object.is(value, 0);
 					};
 	
+	typeChecking.isNonEmptyArray =
+					function isNonEmptyArray(arg) {
+						return Array.isArray(arg) && arg.length > 0;
+					};
+	
+	typeChecking.isNonEmptyArrayLike =
+					function isNonEmptyArrayLike(arg) {
+						return typeChecking.isArrayLike(arg) && arg.length > 0;
+					};
+	
 	typeChecking.isNonEmptyString =
 					function isNonEmptyString(arg) {
 						return typeof arg === "string" && arg !== "";
@@ -425,16 +435,10 @@
 					};
 	
 	typeChecking.expectFunction =
-					function expectFunction(value, arity) {
+					function expectFunction(value) {
 						if(typeChecking.disabled) return;
 						if(typeof value !== "function") {
 							throwNewTypeError("a function");
-						}
-						if(arguments.length === 2) {
-							typeChecking.expectPositiveInteger(arity);
-							if(value.length !== arity) {
-								throwNewTypeError("a function with a 'length' of " + arity);
-							}
 						}
 					};
 	
@@ -599,16 +603,10 @@
 					};
 	
 	typeChecking.expectString =
-					function expectString(value, length) {
+					function expectString(value) {
 						if(typeChecking.disabled) return;
 						if(typeof(value) !== "string") {
 							throwNewTypeError("a string");
-						}
-						if(arguments.length === 2) {
-							typeChecking.expectPositiveInteger(length);
-							if(value.length !== length) {
-								throwNewTypeError("a string of length " + length);
-							}
 						}
 					};
 	

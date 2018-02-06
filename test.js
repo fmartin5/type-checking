@@ -419,6 +419,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isStrictlyNegativeInteger(NaN) === false);
 			assert.ok(tc.isStrictlyNegativeInteger(Infinity) === false);
 			assert.ok(tc.isStrictlyNegativeInteger(-Infinity) === false);
+			assert.ok(tc.isStrictlyPositiveNumber({'valueOf': () => -1}) === false);
 			
 			assert.ok(tc.isStrictlyNegativeInteger(false) === false);
 			assert.ok(tc.isStrictlyNegativeInteger(true) === false);
@@ -429,7 +430,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isStrictlyNegativeInteger(undefined) === false);
 			assert.ok(tc.isStrictlyNegativeInteger("") === false);
 		});
-			
+		
 		test("@function .isStrictlyNegativeNumber", function () {
 			assert.ok(tc.isStrictlyNegativeNumber(0) === false);
 			assert.ok(tc.isStrictlyNegativeNumber(-0) === false);
@@ -440,6 +441,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isStrictlyNegativeNumber(NaN) === false);
 			assert.ok(tc.isStrictlyNegativeNumber(Infinity) === false);
 			assert.ok(tc.isStrictlyNegativeNumber(-Infinity));
+			assert.ok(tc.isStrictlyPositiveNumber({'valueOf': () => -1}) === false);
 			
 			assert.ok(tc.isStrictlyNegativeNumber(false) === false);
 			assert.ok(tc.isStrictlyNegativeNumber(true) === false);
@@ -449,6 +451,54 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isStrictlyNegativeNumber(null) === false);
 			assert.ok(tc.isStrictlyNegativeNumber(undefined) === false);
 			assert.ok(tc.isStrictlyNegativeNumber("") === false);
+		});
+		
+		test("@function .isStrictlyPositiveInteger", function () {
+			assert.ok(tc.isStrictlyPositiveInteger(0) === false);
+			assert.ok(tc.isStrictlyPositiveInteger(-0) === false);
+			assert.ok(tc.isStrictlyPositiveInteger(1));
+			assert.ok(tc.isStrictlyPositiveInteger(-1) === false);
+			assert.ok(tc.isStrictlyPositiveInteger(emptyNumber) === false);
+			assert.ok(tc.isStrictlyPositiveInteger(new Number(1)) === false);
+			assert.ok(tc.isStrictlyPositiveInteger(Math.PI) === false);
+			assert.ok(tc.isStrictlyPositiveInteger(-Math.PI) === false);
+			assert.ok(tc.isStrictlyPositiveInteger(NaN) === false);
+			assert.ok(tc.isStrictlyPositiveInteger(Infinity) === false);
+			assert.ok(tc.isStrictlyPositiveInteger(-Infinity) === false);
+			assert.ok(tc.isStrictlyPositiveNumber({'valueOf': () => 1}) === false);
+			
+			assert.ok(tc.isStrictlyPositiveInteger(false) === false);
+			assert.ok(tc.isStrictlyPositiveInteger(true) === false);
+			assert.ok(tc.isStrictlyPositiveInteger("1") === false);
+			assert.ok(tc.isStrictlyPositiveInteger(booleanObject) === false);
+			assert.ok(tc.isStrictlyPositiveInteger(numberObject) === false);
+			assert.ok(tc.isStrictlyPositiveInteger(null) === false);
+			assert.ok(tc.isStrictlyPositiveInteger(undefined) === false);
+			assert.ok(tc.isStrictlyPositiveInteger("") === false);
+		});
+		
+		test("@function .isStrictlyPositiveNumber", function () {
+			assert.ok(tc.isStrictlyPositiveNumber(0) === false);
+			assert.ok(tc.isStrictlyPositiveNumber(-0) === false);
+			assert.ok(tc.isStrictlyPositiveNumber(1));
+			assert.ok(tc.isStrictlyPositiveNumber(-1) === false);
+			assert.ok(tc.isStrictlyPositiveNumber(new Number(0)) === false);
+			assert.ok(tc.isStrictlyPositiveNumber(new Number(1)) === false);
+			assert.ok(tc.isStrictlyPositiveNumber(Math.PI));
+			assert.ok(tc.isStrictlyPositiveNumber(-Math.PI) === false);
+			assert.ok(tc.isStrictlyPositiveNumber(NaN) === false);
+			assert.ok(tc.isStrictlyPositiveNumber(Infinity));
+			assert.ok(tc.isStrictlyPositiveNumber(-Infinity) === false);
+			assert.ok(tc.isStrictlyPositiveNumber({'valueOf': () => 1}) === false);
+			
+			assert.ok(tc.isStrictlyPositiveNumber(false) === false);
+			assert.ok(tc.isStrictlyPositiveNumber(true) === false);
+			assert.ok(tc.isStrictlyPositiveNumber("1") === false);
+			assert.ok(tc.isStrictlyPositiveNumber(booleanObject) === false);
+			assert.ok(tc.isStrictlyPositiveNumber(numberObject) === false);
+			assert.ok(tc.isStrictlyPositiveNumber(null) === false);
+			assert.ok(tc.isStrictlyPositiveNumber(undefined) === false);
+			assert.ok(tc.isStrictlyPositiveNumber("") === false);
 		});
 		
 	});

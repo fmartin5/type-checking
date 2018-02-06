@@ -242,6 +242,11 @@
 						return typeof arg === "string" && arg !== "";
 					};
 	
+	typeChecking.isNonNull =
+					function isNonNull(x) {
+						return x !== null && typeof x !== "undefined";
+					};
+	
 	typeChecking.isNonPrimitive =
 					function isNonPrimitive(x) {
 						return !typeChecking.isPrimitive(x);

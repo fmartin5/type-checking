@@ -314,6 +314,27 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isNonEmptyString(undefined) === false);
 		});
 		
+		test("@function .isNonNull", function () {
+			assert.ok(tc.isNonNull(0));
+			assert.ok(tc.isNonNull(-0));
+			assert.ok(tc.isNonNull(NaN));
+			assert.ok(tc.isNonNull(+Infinity));
+			assert.ok(tc.isNonNull(-Infinity));
+			assert.ok(tc.isNonNull(""));
+			assert.ok(tc.isNonNull("null"));
+			assert.ok(tc.isNonNull("undefined"));
+			assert.ok(tc.isNonNull(false));
+			assert.ok(tc.isNonNull(true));
+			assert.ok(tc.isNonNull(null) === false);
+			assert.ok(tc.isNonNull(undefined) === false);
+			
+			assert.ok(tc.isNonNull(emptyNullObject));
+			assert.ok(tc.isNonNull(emptyPlainObject));
+			
+			assert.ok(tc.isNonNull({'valueOf': () => null}));
+			assert.ok(tc.isNonNull({'valueOf': () => undefined}));
+		});
+		
 		test("@function .isNumber", function () {
 			assert.ok(tc.isNumber(0));
 			assert.ok(tc.isNumber(-0));

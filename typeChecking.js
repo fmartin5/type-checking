@@ -64,12 +64,10 @@
 	
 	typeChecking.disabled = false;
 	
-	const reLines = /[\n\r]+/g;
-	
 	const areSymbolsSupported = typeof Symbol === "function";
 	const isSymbolIteratorSupported = (areSymbolsSupported && typeof Symbol.iterator === "symbol");
 	const isSymbolToStringTagSupported = (areSymbolsSupported && typeof Symbol.toStringTag === "symbol");
-		
+	
 	function getErrorMessage(errorType, parameterName, readableTypeDescription) {
 		return `An instance of '${errorType.name}' was about to be thrown but the error constructor was called incorrectly: argument ${parameterName} was not ${readableTypeDescription}.`;
 	}
@@ -96,307 +94,307 @@
 	typeChecking.throwNewTypeError = throwNewTypeError;
 	
 	typeChecking.isArray =
-					function isArray(x) {
-						return Array.isArray(x);
-					};
+		function isArray(x) {
+			return Array.isArray(x);
+		};
 	
 	// 24.1.5 'ArrayBuffer' instances each have an [[ArrayBufferData]] internal slot and an [[ArrayBufferByteLength]] internal slot.
 	typeChecking.isArrayBuffer =
-					function isArrayBuffer(x) {
-						try {
-							Reflect.getOwnPropertyDescriptor(ArrayBuffer.prototype, "byteLength").get.call(x);
-							return true;
-						}
-						catch(_) {
-							return false;
-						}
-					};
+		function isArrayBuffer(x) {
+			try {
+				Reflect.getOwnPropertyDescriptor(ArrayBuffer.prototype, "byteLength").get.call(x);
+				return true;
+			}
+			catch(_) {
+				return false;
+			}
+		};
 	
 	// Allows function objects unlike Lodash (https://lodash.com/docs#isArrayLike).
 	// @note: an object being array-like does not guarantee that all generic 'Array' methods will work on it:
 	//   some of those methods require their argument's length to be less than 2^32.
 	typeChecking.isArrayLike =
-					function isArrayLike(x) {
-						return typeof x === "string" || (typeof x === "object" || typeof x === "function")
-						&& x !== null && Number.isSafeInteger(x.length) && x.length >= 0;
-					};
+		function isArrayLike(x) {
+			return typeof x === "string" || (typeof x === "object" || typeof x === "function")
+			&& x !== null && Number.isSafeInteger(x.length) && x.length >= 0;
+		};
 	
 	typeChecking.isArrayLikeObject =
-					function isArrayLikeObject(x) {
-						return (typeof x === "object" || typeof x === "function")
-						&& x !== null && Number.isSafeInteger(x.length) && x.length >= 0;
-					};
+		function isArrayLikeObject(x) {
+			return (typeof x === "object" || typeof x === "function")
+			&& x !== null && Number.isSafeInteger(x.length) && x.length >= 0;
+		};
 	
 	typeChecking.isBoolean =
-					function isBoolean(x) {
-						return typeof x === "boolean";
-					};
+		function isBoolean(x) {
+			return typeof x === "boolean";
+		};
 	
 	typeChecking.isDataView =
-					function isDataView(x) {
-						try {
-							Object.getOwnPropertyDescriptor(DataView.prototype, "buffer").get.call(x);
-							return true; 
-						}
-						catch(_) {
-							return false;
-						}
-					};
+		function isDataView(x) {
+			try {
+				Object.getOwnPropertyDescriptor(DataView.prototype, "buffer").get.call(x);
+				return true; 
+			}
+			catch(_) {
+				return false;
+			}
+		};
 	
 	typeChecking.isDate =
-					function isDate(x) {
-						try {
-							Date.prototype.getDate.call(x);
-							return true;
-						}
-						catch(_) {
-							return false;
-						}
-					};
+		function isDate(x) {
+			try {
+				Date.prototype.getDate.call(x);
+				return true;
+			}
+			catch(_) {
+				return false;
+			}
+		};
 	
 	// @see Duck typing https://en.wikipedia.org/wiki/Duck_typing
 	typeChecking.isDuckOf =
-					function isDuckOf(x, object) {
-						typeChecking.expectNonPrimitive(object);
-						if(typeChecking.isPrimitive(x)) return false;
-						for(var i in object) {
-							if(typeof x[i] !== typeof object[i]) return false;
-						}
-						return true;
-					};
+		function isDuckOf(x, object) {
+			typeChecking.expectNonPrimitive(object);
+			if(typeChecking.isPrimitive(x)) return false;
+			for(var i in object) {
+				if(typeof x[i] !== typeof object[i]) return false;
+			}
+			return true;
+		};
 	
 	typeChecking.isFormalGeneratorFunction =
-					(function () {
-						const _GeneratorFunction = (function () {
-							try {
-								// eslint-disable-next-line no-eval
-								return eval("(function* () {}).constructor");
-							}
-							catch (_) {
-								return null;
-							}
-						}());
-						return function isFormalGeneratorFunction(x) {
-							if(!_GeneratorFunction) return false;
-							if(typeof x !== "function") return false;
-							return x instanceof _GeneratorFunction;
-						};
-					}());
+		(function () {
+			const _GeneratorFunction = (function () {
+				try {
+					// eslint-disable-next-line no-eval
+					return eval("(function* () {}).constructor");
+				}
+				catch (_) {
+					return null;
+				}
+			}());
+			return function isFormalGeneratorFunction(x) {
+				if(!_GeneratorFunction) return false;
+				if(typeof x !== "function") return false;
+				return x instanceof _GeneratorFunction;
+			};
+		}());
 	
 	typeChecking.isFunction =
-					function isFunction(x) {
-						return typeof x === "function";
-					};
+		function isFunction(x) {
+			return typeof x === "function";
+		};
 	
 	typeChecking.isInstanceOf =
-					function isInstanceOf(x, ctor) {
-						return x !== null && typeof x !== "undefined"
-						&& typeof ctor === "function" && x instanceof ctor;
-					};
+		function isInstanceOf(x, ctor) {
+			return x !== null && typeof x !== "undefined"
+			&& typeof ctor === "function" && x instanceof ctor;
+		};
 	
 	typeChecking.isImmutable =
-					function isImmutable(value) {
-						return typeChecking.isPrimitive(value) || (Object.isSealed(value) && Object.isFrozen(value));
-					};
+		function isImmutable(value) {
+			return typeChecking.isPrimitive(value) || (Object.isSealed(value) && Object.isFrozen(value));
+		};
 	
 	typeChecking.isInteger =
-					function isInteger(value) {
-						return typeof value === "number" && value % 1 === 0;
-					};
+		function isInteger(value) {
+			return typeof value === "number" && value % 1 === 0;
+		};
 	
 	typeChecking.isIterable =
-					function isIterable(value) {
-						if(!isSymbolIteratorSupported) return false;
-						if(value === null || typeof value === "undefined") return false;
-						return Symbol.iterator in Object(value);
-					};
+		function isIterable(value) {
+			if(!isSymbolIteratorSupported) return false;
+			if(value === null || typeof value === "undefined") return false;
+			return Symbol.iterator in Object(value);
+		};
 	
 	// @see https://stackoverflow.com/questions/29924932/how-to-reliably-check-an-object-is-an-ecmascript-6-map-set
 	typeChecking.isMap =
-					function isMap(o) {
-						try {
-							Map.prototype.has.call(o); // throws if o is not an object or has no [[MapData]]
-							return true;
-						}
-						catch(_) {
-							return false;
-						}
-					};
+		function isMap(o) {
+			try {
+				Map.prototype.has.call(o); // throws if o is not an object or has no [[MapData]]
+				return true;
+			}
+			catch(_) {
+				return false;
+			}
+		};
 	
 	typeChecking.isMutable =
-					function isMutable(value) {
-						return !typeChecking.isImmutable(value);
-					};
+		function isMutable(value) {
+			return !typeChecking.isImmutable(value);
+		};
 	
 	typeChecking.isMutableArrayLikeObject =
-					function isMutableArrayLikeObject(value) {
-						return typeChecking.isArrayLikeObject(value) && !typeChecking.isImmutable(value);
-					};
+		function isMutableArrayLikeObject(value) {
+			return typeChecking.isArrayLikeObject(value) && !typeChecking.isImmutable(value);
+		};
 	
 	typeChecking.isNegativeInteger =
-					function isNegativeInteger(value) {
-						return typeof value === "number" && value % 1 === 0
-						&& value <= 0 && value > Number.NEGATIVE_INFINITY && !Object.is(value, 0);
-					};
+		function isNegativeInteger(value) {
+			return typeof value === "number" && value % 1 === 0
+			&& value <= 0 && value > Number.NEGATIVE_INFINITY && !Object.is(value, 0);
+		};
 	
 	typeChecking.isNegativeNumber =
-					function isNegativeNumber(value) {
-						return typeof value === "number" && value <= 0 && !Object.is(value, 0);
-					};
+		function isNegativeNumber(value) {
+			return typeof value === "number" && value <= 0 && !Object.is(value, 0);
+		};
 	
 	typeChecking.isNonEmptyArray =
-					function isNonEmptyArray(arg) {
-						return Array.isArray(arg) && arg.length > 0;
-					};
+		function isNonEmptyArray(arg) {
+			return Array.isArray(arg) && arg.length > 0;
+		};
 	
 	typeChecking.isNonEmptyArrayLike =
-					function isNonEmptyArrayLike(arg) {
-						return typeChecking.isArrayLike(arg) && arg.length > 0;
-					};
+		function isNonEmptyArrayLike(arg) {
+			return typeChecking.isArrayLike(arg) && arg.length > 0;
+		};
 	
 	typeChecking.isNonEmptyString =
-					function isNonEmptyString(arg) {
-						return typeof arg === "string" && arg !== "";
-					};
+		function isNonEmptyString(arg) {
+			return typeof arg === "string" && arg !== "";
+		};
 	
 	typeChecking.isNonNull =
-					function isNonNull(x) {
-						return x !== null && typeof x !== "undefined";
-					};
+		function isNonNull(x) {
+			return x !== null && typeof x !== "undefined";
+		};
 	
 	typeChecking.isNonPrimitive =
-					function isNonPrimitive(x) {
-						return !typeChecking.isPrimitive(x);
-					};
+		function isNonPrimitive(x) {
+			return !typeChecking.isPrimitive(x);
+		};
 	
 	typeChecking.isNumber =
-					function isNumber(value) {
-						return typeof value === "number";
-					};
+		function isNumber(value) {
+			return typeof value === "number";
+		};
 	
 	typeChecking.isPositiveInteger =
-					function isPositiveInteger(value) {
-						return typeof value === "number" && value % 1 === 0
-						&& value >= 0 && value < Number.POSITIVE_INFINITY && !Object.is(value, -0);
-					};
+		function isPositiveInteger(value) {
+			return typeof value === "number" && value % 1 === 0
+			&& value >= 0 && value < Number.POSITIVE_INFINITY && !Object.is(value, -0);
+		};
 	
 	typeChecking.isPositiveNumber =
-					function isPositiveNumber(value) {
-						return typeof value === "number" && value >= 0 && !Object.is(value, -0);
-					};
+		function isPositiveNumber(value) {
+			return typeof value === "number" && value >= 0 && !Object.is(value, -0);
+		};
 	
 	typeChecking.isPrimitive =
-					function isPrimitive(x) {
-						return x === null || typeof x === "undefined" || typeof x === "boolean" || typeof x === "number" || typeof x === "string" || typeof x === "symbol";
-					};
+		function isPrimitive(x) {
+			return x === null || typeof x === "undefined" || typeof x === "boolean" || typeof x === "number" || typeof x === "string" || typeof x === "symbol";
+		};
 	
 	typeChecking.isRegExp =
-					function isRegExp(x) {
-						if(isSymbolToStringTagSupported) {
-							try {
-								// 21.2.5.10 get RegExp.prototype.source
-								Reflect.getOwnPropertyDescriptor(RegExp.prototype, "source").get.call(x);
-								// Now 'x' is either a 'RegExp' instance or the 'RegExp.prototype' object, which is not a 'RegExp' instance.
-								return x !== RegExp.prototype;
-							}
-							catch(_) {
-								return false;
-							}
-						}
-						return Object.prototype.toString.call(x) === "[object RegExp]";
-					};
+		function isRegExp(x) {
+			if(isSymbolToStringTagSupported) {
+				try {
+					// 21.2.5.10 get RegExp.prototype.source
+					Reflect.getOwnPropertyDescriptor(RegExp.prototype, "source").get.call(x);
+					// Now 'x' is either a 'RegExp' instance or the 'RegExp.prototype' object, which is not a 'RegExp' instance.
+					return x !== RegExp.prototype;
+				}
+				catch(_) {
+					return false;
+				}
+			}
+			return Object.prototype.toString.call(x) === "[object RegExp]";
+		};
 	
 	typeChecking.isRegularNumber =
-					function isRegularNumber(value) {
-						if(typeof value !== "number") return false;
-						// Checks for NaN
-						if(value !== value) return false;
-						return value < Number.POSITIVE_INFINITY && value > Number.NEGATIVE_INFINITY;
-					};
+		function isRegularNumber(value) {
+			if(typeof value !== "number") return false;
+			// Checks for NaN
+			if(value !== value) return false;
+			return value < Number.POSITIVE_INFINITY && value > Number.NEGATIVE_INFINITY;
+		};
 	
 	typeChecking.isSafeInteger =
-					function isSafeInteger(value) {
-						return typeof value === "number" && value % 1 === 0
-						&& value >= Number.MIN_SAFE_INTEGER && value <= Number.MAX_SAFE_INTEGER;
-					};
+		function isSafeInteger(value) {
+			return typeof value === "number" && value % 1 === 0
+			&& value >= Number.MIN_SAFE_INTEGER && value <= Number.MAX_SAFE_INTEGER;
+		};
 	
 	// @see https://stackoverflow.com/questions/29924932/how-to-reliably-check-an-object-is-an-ecmascript-6-map-set
 	typeChecking.isSet =
-					function isSet(o) {
-						try {
-							Set.prototype.has.call(o); // throws if o is not an object or has no [[SetData]]
-							return true;
-						}
-						catch(_) {
-							return false;
-						}
-					};
+		function isSet(o) {
+			try {
+				Set.prototype.has.call(o); // throws if o is not an object or has no [[SetData]]
+				return true;
+			}
+			catch(_) {
+				return false;
+			}
+		};
 	
 	// 24.1.5 'SharedArrayBuffer' instances each have an [[ArrayBufferData]] internal slot and an [[ArrayBufferByteLength]] internal slot.
 	typeChecking.isSharedArrayBuffer =
-					function isSharedArrayBuffer(x) {
-						try {
-							Reflect.getOwnPropertyDescriptor(SharedArrayBuffer.prototype, "byteLength").get.call(x);
-							return true;
-						}
-						catch(_) {
-							return false;
-						}
-					};
+		function isSharedArrayBuffer(x) {
+			try {
+				Reflect.getOwnPropertyDescriptor(SharedArrayBuffer.prototype, "byteLength").get.call(x);
+				return true;
+			}
+			catch(_) {
+				return false;
+			}
+		};
 	
 	typeChecking.isStrictlyNegativeInteger =
-					function isStrictlyNegativeInteger(value) {
-						return typeof value === "number" && value % 1 === 0
-						&& value < 0 && value > Number.NEGATIVE_INFINITY;
-					};
+		function isStrictlyNegativeInteger(value) {
+			return typeof value === "number" && value % 1 === 0
+			&& value < 0 && value > Number.NEGATIVE_INFINITY;
+		};
 	
 	typeChecking.isStrictlyNegativeNumber =
-					function isStrictlyNegativeNumber(value) {
-						return typeof value === "number" && value < 0;
-					};
+		function isStrictlyNegativeNumber(value) {
+			return typeof value === "number" && value < 0;
+		};
 	
 	typeChecking.isStrictlyPositiveInteger =
-					function isStrictlyPositiveInteger(value) {
-						return typeof value === "number" && value % 1 === 0
-						&& value > 0 && value < Number.POSITIVE_INFINITY;
-					};
+		function isStrictlyPositiveInteger(value) {
+			return typeof value === "number" && value % 1 === 0
+			&& value > 0 && value < Number.POSITIVE_INFINITY;
+		};
 	
 	typeChecking.isStrictlyPositiveNumber =
-					function isStrictlyPositiveNumber(value) {
-						return typeof value === "number" && value > 0;
-					};
+		function isStrictlyPositiveNumber(value) {
+			return typeof value === "number" && value > 0;
+		};
 	
 	typeChecking.isString =
-					function isString(x) {
-						return typeof x === "string";
-					};
+		function isString(x) {
+			return typeof x === "string";
+		};
 	
 	typeChecking.isSymbol =
-					function isSymbol(value) {
-						return typeof value === "symbol";
-					};
-		
+		function isSymbol(value) {
+			return typeof value === "symbol";
+		};
+	
 	typeChecking.isWeakMap =
-					function isWeakMap(o) {
-						try {
-							WeakMap.prototype.has.call(o, {});
-							return true;
-						} 
-						catch(_) {
-							return false;
-						}
-					};
+		function isWeakMap(o) {
+			try {
+				WeakMap.prototype.has.call(o, {});
+				return true;
+			} 
+			catch(_) {
+				return false;
+			}
+		};
 	
 	typeChecking.isWeakSet =
-					function isWeakSet(o) {
-						try {
-							WeakSet.prototype.has.call(o, {});
-							return true;
-						}
-						catch(_) {
-							return false;
-						}
-					};
+		function isWeakSet(o) {
+			try {
+				WeakSet.prototype.has.call(o, {});
+				return true;
+			}
+			catch(_) {
+				return false;
+			}
+		};
 	
 	const descriptionsByTypeName = {
 		'Array': "an 'Array' object",

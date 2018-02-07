@@ -461,6 +461,8 @@
 			const description = descriptionsByTypeName[typeName];
 			const predicate = typeChecking["is" + typeName];
 			const pluralTypeName = pluralizeTypeName(typeName);
+			const pluralTypeDescription = "an array (or array-like object) where every element is " + description;
+			const elementTypeDescription = "every element to be " + description;
 			
 			function pluralizeTypeName(typeName) {
 				if(typeName.endsWith("instanceOf")) {
@@ -480,12 +482,11 @@
 			typeChecking["expect" + pluralTypeName] = (function (values, ...args) {
 				if(typeChecking.disabled) return;
 				if(!typeChecking.isArrayLikeObject(values)) {
-					throwNewTypeError(description);
+					throwNewTypeError(pluralTypeDescription);
 				}
-				typeChecking.expectArrayLikeObject(values);
 				for(const value of values) {
 					if(!predicate(value, ...args)) {
-						throwNewTypeError(description);
+						throwNewTypeError(elementTypeDescription);
 					}
 				}
 			});

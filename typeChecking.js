@@ -177,6 +177,12 @@
 						return typeof x === "function";
 					};
 	
+	typeChecking.isInstanceOf =
+					function isInstanceOf(x, ctor) {
+						return x !== null && typeof x !== "undefined"
+						&& typeof ctor === "function" && x instanceof ctor;
+					};
+	
 	typeChecking.isImmutable =
 					function isImmutable(value) {
 						return typeChecking.isPrimitive(value) || (Object.isSealed(value) && Object.isFrozen(value));

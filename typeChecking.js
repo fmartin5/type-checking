@@ -74,12 +74,23 @@
 		return `An instance of '${errorType.name}' was about to be thrown but the error constructor was called incorrectly: argument ${parameterName} was not ${readableTypeDescription}.`;
 	}
 	
-	function throwNewTypeError(readableTypeDescription) {
-		if(typeof readableTypeDescription !== "string" || readableTypeDescription === "") {
-			// Do not modify the 'stack' property in this case.
-			throw new TypeError(getErrorMessage(TypeError, "readableTypeDescription", "a non-empty string"));
+	// @param {string} typeDescription - A non-empty and preferably readable description of the type which was expected.
+	// @param {function} [thrower] - A function that should not show up in the stack trace of the generated error.
+	function throwNewTypeError(typeDescription, thrower) {
+		if(typeof typeDescription !== "string" || typeDescription === "") {
+			// Do not attempt to modify the 'stack' property in this case.
+			throw new TypeError(getErrorMessage(TypeError, "typeDescription", "a non-empty string"));
 		}
-		throw new TypeError("expected " + readableTypeDescription + ".");
+		const error = new TypeError("expected " + typeDescription + ".");
+		if("1" in arguments) {
+			if(typeof thrower !== "function") {
+				throw new TypeError(getErrorMessage(TypeError, "thrower", "a function"));
+			}
+			if(typeof Error.captureStackTrace === "function") {
+				Error.captureStackTrace(error, thrower);
+			}
+		}
+		throw error;
 	}
 	
 	typeChecking.throwNewTypeError = throwNewTypeError;
@@ -444,10 +455,10 @@
 		// eslint-disable-next-line no-loop-func
 		(function makeExpectation(typeName) {
 			
-			typeChecking["expect" + typeName] = (function (arg, ...args) {
+			typeChecking["expect" + typeName] = (function expectation(arg, ...args) {
 				if(typeChecking.disabled) return;
 				if(!typeChecking["is" + typeName](arg, ...args)) {
-					throwNewTypeError(descriptionsByTypeName[typeName]);
+					throwNewTypeError(descriptionsByTypeName[typeName], expectation);
 				}
 			});
 		
@@ -479,14 +490,14 @@
 				}
 			}
 			
-			typeChecking["expect" + pluralTypeName] = (function (values, ...args) {
+			typeChecking["expect" + pluralTypeName] = (function expectation(values, ...args) {
 				if(typeChecking.disabled) return;
 				if(!typeChecking.isArrayLikeObject(values)) {
-					throwNewTypeError(pluralTypeDescription);
+					throwNewTypeError(pluralTypeDescription, expectation);
 				}
 				for(const value of values) {
 					if(!predicate(value, ...args)) {
-						throwNewTypeError(elementTypeDescription);
+						throwNewTypeError(elementTypeDescription, expectation);
 					}
 				}
 			});
@@ -500,11 +511,11 @@
 			const description = descriptionsByTypeName[typeName];
 			const predicate = typeChecking["is" + typeName];
 			
-			typeChecking["expectOptional" + typeName] = (function (arg, ...args) {
+			typeChecking["expectOptional" + typeName] = (function expectation(arg, ...args) {
 				if(typeChecking.disabled) return;
 				if(typeof arg === 'undefined') return;
 				if(!predicate(arg, ...args)) {
-					throwNewTypeError(description);
+					throwNewTypeError(description, expectation);
 				}
 			});
 		}(typeName));

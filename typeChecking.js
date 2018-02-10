@@ -396,6 +396,7 @@
 		'Boolean': "a boolean",
 		'Date': "a 'Date' object",
 		'DuckOf': "a duck of the given 'duckType'",
+		'FormalGeneratorFunction': "a formal generator function",
 		'Function': "a function",
 		'InstanceOf': "an instance of the given constructor",
 		'Integer': "an integer",

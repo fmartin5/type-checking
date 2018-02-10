@@ -163,7 +163,7 @@
 			return true;
 		};
 	
-	typeChecking.isFormalGeneratorFunction = function isFormalGeneratorFunction(x) {
+	typeChecking.isGeneratorFunction = function isGeneratorFunction(x) {
 		if(!isSymbolIteratorSupported) return false;
 		if(typeof x !== "function") return false;
 		try {
@@ -396,8 +396,8 @@
 		'Boolean': "a boolean",
 		'Date': "a 'Date' object",
 		'DuckOf': "a duck of the given 'duckType'",
-		'FormalGeneratorFunction': "a formal generator function",
 		'Function': "a function",
+		'GeneratorFunction': "a generator function",
 		'InstanceOf': "an instance of the given constructor",
 		'Integer': "an integer",
 		'Iterable': "an iterable",

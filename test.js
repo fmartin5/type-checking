@@ -193,12 +193,12 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isDate(foreignEmptyDate));
 		});		
 		
-		test("@function .isFormalGeneratorFunction", function () {
-			assert.ok(tc.isFormalGeneratorFunction(emptyFunction) === false);
-			assert.ok(tc.isFormalGeneratorFunction(emptyGeneratorFunction));
-			assert.ok(tc.isFormalGeneratorFunction(emptyGeneratorObject) === false);
-			assert.ok(tc.isFormalGeneratorFunction(functionObject) === false);
-			assert.ok(tc.isFormalGeneratorFunction(foreignEmptyGeneratorFunction));
+		test("@function .isGeneratorFunction", function () {
+			assert.ok(tc.isGeneratorFunction(emptyFunction) === false);
+			assert.ok(tc.isGeneratorFunction(emptyGeneratorFunction));
+			assert.ok(tc.isGeneratorFunction(emptyGeneratorObject) === false);
+			assert.ok(tc.isGeneratorFunction(functionObject) === false);
+			assert.ok(tc.isGeneratorFunction(foreignEmptyGeneratorFunction));
 		});		
 		
 		test("@function .isFunction", function () {

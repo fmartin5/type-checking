@@ -523,4 +523,30 @@ suite("@module typeChecking", function () {
 		});
 		
 	});
+	
+	suite("expectations", function () {
+		
+		test("@function .expectInteger", function () {
+			assert.doesNotThrow(function(){ tc.expectInteger(1); });
+			assert.ok(tc.expectInteger(1) === undefined);
+			assert.throws(function(){ tc.expectInteger(); }, /integer/i);
+		});
+		
+		test("@function .expectIntegers", function () {
+			assert.doesNotThrow(() => tc.expectIntegers([]));
+			assert.doesNotThrow(() => tc.expectIntegers([1, 2]));
+			assert.ok(tc.expectIntegers([1, 2]) === undefined);
+			assert.throws(() => tc.expectIntegers(null), /integer/i);
+			assert.throws(() => tc.expectIntegers([null]), /integer/i);
+		});
+		
+		test("@function .expectOptionalInteger", function () {
+			assert.doesNotThrow(() => tc.expectOptionalInteger(undefined));
+			assert.doesNotThrow(() => tc.expectOptionalInteger(1));
+			assert.ok(tc.expectOptionalInteger(1) === undefined);
+			assert.throws(() => tc.expectOptionalInteger(null), /integer/i);
+			assert.throws(() => tc.expectOptionalInteger(""), /integer/i);
+		});
+	});
+	
 });

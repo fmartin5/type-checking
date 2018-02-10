@@ -84,7 +84,7 @@ suite("@module typeChecking", function () {
 		const foreignEmptySet = vm.runInContext("new Set()", sandbox);
 		const foreignEmptyWeakMap = vm.runInContext("new WeakMap()", sandbox);
 		const foreignEmptyWeakSet = vm.runInContext("new WeakSet()", sandbox);		
-
+		
 		const foreignEmptyString = vm.runInContext("('')", sandbox);
 		const foreignRexExpPrototype = vm.runInContext("RegExp.prototype", sandbox);
 		
@@ -129,7 +129,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isArrayBuffer(emptyPlainObject) === false);
 			assert.ok(tc.isArrayBuffer(fakeArrayBuffer) === false);
 			assert.ok(tc.isArrayBuffer(maskedArrayBuffer));
-
+			
 			assert.ok(tc.isArrayBuffer(foreignEmptyArrayBuffer));
 		});
 		
@@ -140,7 +140,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isArrayLike(emptyPlainObject) === false);
 			assert.ok(tc.isArrayLike(fakeArray) === false);
 			assert.ok(tc.isArrayLike(maskedArray));
-
+			
 			assert.ok(tc.isArrayLike(foreignEmptyArray));
 			assert.ok(tc.isArrayLike(foreignEmptyArrayLikeObject));
 			assert.ok(tc.isArrayLike(foreignEmptyString));
@@ -191,7 +191,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isDate(0) === false);
 			assert.ok(tc.isDate("Monday") === false);
 			assert.ok(tc.isDate(foreignEmptyDate));
-		});		
+		});
 		
 		test("@function .isGeneratorFunction", function () {
 			assert.ok(tc.isGeneratorFunction(emptyFunction) === false);
@@ -199,7 +199,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isGeneratorFunction(emptyGeneratorObject) === false);
 			assert.ok(tc.isGeneratorFunction(functionObject) === false);
 			assert.ok(tc.isGeneratorFunction(foreignEmptyGeneratorFunction));
-		});		
+		});
 		
 		test("@function .isFunction", function () {
 			assert.ok(tc.isFunction(emptyFunction));
@@ -208,7 +208,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isFunction(functionObject) === false);
 			assert.ok(tc.isFunction(maskedFunction));
 			assert.ok(tc.isFunction(foreignEmptyFunction));
-		});		
+		});
 		
 		test("@function .isImmutable", function () {
 			assert.ok(tc.isImmutable(s));

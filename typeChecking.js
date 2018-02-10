@@ -163,23 +163,15 @@
 			return true;
 		};
 	
-	typeChecking.isFormalGeneratorFunction =
-		(function () {
-			const _GeneratorFunction = (function () {
-				try {
-					// eslint-disable-next-line no-eval
-					return eval("(function* () {}).constructor");
-				}
-				catch (_) {
-					return null;
-				}
-			}());
-			return function isFormalGeneratorFunction(x) {
-				if(!_GeneratorFunction) return false;
-				if(typeof x !== "function") return false;
-				return x instanceof _GeneratorFunction;
-			};
-		}());
+	typeChecking.isFormalGeneratorFunction = function isFormalGeneratorFunction(x) {
+		if(!isSymbolIteratorSupported) return false;
+		if(typeof x !== "function") return false;
+		try {
+			return String.prototype.startsWith.call(Function.prototype.toString.call(x), "function*");
+		} catch(_) {
+			return false;
+		}
+	};
 	
 	typeChecking.isFunction =
 		function isFunction(x) {

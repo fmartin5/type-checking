@@ -20,15 +20,18 @@ suite("@module typeChecking", function () {
 		const emptyDataView = new DataView(emptyArrayBuffer);
 		const emptyDate = new Date();
 		const emptyError = new Error();
+		const emptyFloat32Array = new Float32Array();
 		const emptyFunction = new Function();
 		const emptyGeneratorFunction = (function* () {});
 		const emptyGeneratorObject = emptyGeneratorFunction();
+		const emptyInt8Array = new Int8Array();
 		const emptyMap = new Map();
 		const emptyNullObject = Object.create(null);
 		const emptyNumber = new Number();
 		const emptyPlainObject = {};
 		const emptyRegExp = new RegExp();
 		const emptySet = new Set();
+		const emptyUint8Array = new Uint8Array();
 		const emptyWeakMap = new WeakMap();
 		const emptyWeakSet = new WeakSet();
 		
@@ -38,13 +41,17 @@ suite("@module typeChecking", function () {
 		const dataViewObject = Object.create(DataView.prototype);
 		const dateObject = Object.create(Date.prototype);
 		const errorObject = Object.create(Error.prototype);
+		const float32ArrayObject = Object.create(Float32Array.prototype);
 		const functionObject = Object.create(Function.prototype);
+		const int8ArrayObject = Object.create(Int8Array.prototype);
 		const mapObject = Object.create(Map.prototype);
 		const numberObject = Object.create(Number.prototype);
 		const regExpObject = Object.create(RegExp.prototype);
 		const setObject = Object.create(Set.prototype);
 // 		const sharedArrayBufferObject = Object.create(SharedArrayBuffer.prototype);
 		const stringObject = Object.create(String.prototype);
+		const typedArrayObject = Object.create(Object.getPrototypeOf(Int8Array).prototype);
+		const uint8ArrayObject = Object.create(Uint8Array.prototype);
 		const weakMapObject = Object.create(WeakMap.prototype);
 		const weakSetObject = Object.create(WeakSet.prototype);
 		
@@ -54,11 +61,15 @@ suite("@module typeChecking", function () {
 		const fakeDataView = {[Symbol.toStringTag]: "DataView"};
 		const fakeDate = {[Symbol.toStringTag]: "Date"};
 		const fakeError = {[Symbol.toStringTag]: "Error"};
+		const fakeFloat32Array = {[Symbol.toStringTag]: "Float32Array"};
 		const fakeFunction = {[Symbol.toStringTag]: "Function"};
+		const fakeInt8Array = {[Symbol.toStringTag]: "Int8Array"};
 		const fakeMap = {[Symbol.toStringTag]: "Map"};
 		const fakeNumber = {[Symbol.toStringTag]: "Number"};
 		const fakeRegExp = {[Symbol.toStringTag]: "RegExp"};
 		const fakeSet = {[Symbol.toStringTag]: "Set"};
+		const fakeTypedArray = {[Symbol.toStringTag]: "TypedArray"};
+		const fakeUint8Array = {[Symbol.toStringTag]: "Uint8Array"};
 		const fakeWeakMap = {[Symbol.toStringTag]: "WeakMap"};
 		const fakeWeakSet = {[Symbol.toStringTag]: "WeakSet"};
 		
@@ -73,15 +84,18 @@ suite("@module typeChecking", function () {
 		const foreignEmptyDataView = vm.runInContext("new DataView(new ArrayBuffer())", sandbox);
 		const foreignEmptyDate = vm.runInContext("new Date()", sandbox);
 		const foreignEmptyError = vm.runInContext("new Error()", sandbox);
+		const foreignEmptyFloat32Array = vm.runInContext("new Float32Array()", sandbox);
 		const foreignEmptyFunction = vm.runInContext("new Function()", sandbox);
 		const foreignEmptyGeneratorFunction = vm.runInContext("(function* () {})", sandbox);
 		const foreignEmptyGeneratorObject = vm.runInContext("(function* () {})()", sandbox);
+		const foreignEmptyInt8Array = vm.runInContext("new Int8Array()", sandbox);
 		const foreignEmptyMap = vm.runInContext("new Map()", sandbox);
 		const foreignEmptyNullObject = vm.runInContext("Object.create(null)", sandbox);
 		const foreignEmptyNumber = vm.runInContext("new Number()", sandbox);
 		const foreignEmptyPlainObject = vm.runInContext("{}", sandbox);
 		const foreignEmptyRegExp = vm.runInContext("new RegExp()", sandbox);
 		const foreignEmptySet = vm.runInContext("new Set()", sandbox);
+		const foreignEmptyUint8Array = vm.runInContext("new Uint8Array()", sandbox);
 		const foreignEmptyWeakMap = vm.runInContext("new WeakMap()", sandbox);
 		const foreignEmptyWeakSet = vm.runInContext("new WeakSet()", sandbox);		
 		
@@ -94,13 +108,16 @@ suite("@module typeChecking", function () {
 		const maskedDataView = Object.defineProperty(new DataView(emptyArrayBuffer), Symbol.toStringTag, {"value": "Foo"});
 		const maskedDate = Object.defineProperty(new Date(), Symbol.toStringTag, {"value": "Foo"});
 		const maskedError = Object.defineProperty(new Error(), Symbol.toStringTag, {"value": "Foo"});
+		const maskedFloat32Array = Object.defineProperty(new Float32Array(), Symbol.toStringTag, {"value": "Foo"});
 		const maskedFunction = Object.defineProperty(new Function(), Symbol.toStringTag, {"value": "Foo"});
+		const maskedInt8Array = Object.defineProperty(new Int8Array(), Symbol.toStringTag, {"value": "Foo"});
 		const maskedMap = Object.defineProperty(new Map(), Symbol.toStringTag, {"value": "Foo"});
 		const maskedNumber = Object.defineProperty(new Number(), Symbol.toStringTag, {"value": "Foo"});
 		const maskedObject = Object.defineProperty(new Object(), Symbol.toStringTag, {"value": "Foo"});
 		const maskedRegExp = Object.defineProperty(new RegExp(), Symbol.toStringTag, {"value": "Foo"});
 		const maskedSet = Object.defineProperty(new Set(), Symbol.toStringTag, {"value": "Foo"});
 		const maskedString = Object.defineProperty(new String(), Symbol.toStringTag, {"value": "Foo"});
+		const maskedUint8Array = Object.defineProperty(new Uint8Array(), Symbol.toStringTag, {"value": "Foo"});
 		const maskedWeakMap = Object.defineProperty(new WeakMap(), Symbol.toStringTag, {"value": "Foo"});
 		const maskedWeakSet = Object.defineProperty(new WeakSet(), Symbol.toStringTag, {"value": "Foo"});
 		
@@ -113,9 +130,12 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isArray(s) === false);
 			assert.ok(tc.isArray(arguments) === false);
 			assert.ok(tc.isArray(emptyArrayLikeObject) === false);
+			assert.ok(tc.isArray(emptyFloat32Array) === false);
 			assert.ok(tc.isArray(emptyFunction) === false);
+			assert.ok(tc.isArray(emptyInt8Array) === false);
 			assert.ok(tc.isArray(emptyPlainObject) === false);
 			assert.ok(tc.isArray(emptyRegExp) === false);
+			assert.ok(tc.isArray(emptyUint8Array) === false);
 			assert.ok(tc.isArray(fakeArray) === false);
 			assert.ok(tc.isArray(maskedArray));
 			
@@ -522,6 +542,36 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isStrictlyPositiveNumber("") === false);
 		});
 		
+		test("@function .isTypedArray", function () {
+			assert.ok(tc.isTypedArray(arguments) === false);
+			assert.ok(tc.isTypedArray("") === false);
+			assert.ok(tc.isTypedArray(emptyArray) === false);
+			assert.ok(tc.isTypedArray(emptyArrayBuffer) === false);
+			assert.ok(tc.isTypedArray(emptyArrayLikeObject) === false);
+			assert.ok(tc.isTypedArray(emptyDataView) === false);
+			assert.ok(tc.isTypedArray(emptyFloat32Array));
+			assert.ok(tc.isTypedArray(emptyInt8Array));
+			assert.ok(tc.isTypedArray(emptyPlainObject) === false);
+			
+			assert.ok(tc.isTypedArray(fakeArrayBuffer) === false);
+			assert.ok(tc.isTypedArray(fakeFloat32Array) === false);
+			assert.ok(tc.isTypedArray(fakeTypedArray) === false);
+			assert.ok(tc.isTypedArray(fakeUint8Array) === false);
+			
+			assert.ok(tc.isTypedArray(foreignEmptyFloat32Array));
+			assert.ok(tc.isTypedArray(foreignEmptyInt8Array));
+			assert.ok(tc.isTypedArray(foreignEmptyUint8Array));
+			
+			assert.ok(tc.isTypedArray(maskedInt8Array));
+			assert.ok(tc.isTypedArray(maskedFloat32Array));
+			assert.ok(tc.isTypedArray(maskedUint8Array));
+			
+			assert.ok(tc.isTypedArray(float32ArrayObject) === false);
+			assert.ok(tc.isTypedArray(int8ArrayObject) === false);
+			assert.ok(tc.isTypedArray(typedArrayObject) === false);
+			assert.ok(tc.isTypedArray(uint8ArrayObject) === false);
+		});
+		
 	});
 	
 	suite("expectations", function () {
@@ -548,5 +598,4 @@ suite("@module typeChecking", function () {
 			assert.throws(() => tc.expectOptionalInteger(""), /integer/i);
 		});
 	});
-	
 });

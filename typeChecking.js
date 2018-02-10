@@ -65,8 +65,12 @@
 	typeChecking.disabled = false;
 	
 	const areSymbolsSupported = typeof Symbol === "function";
+	const areTypedArraysSupported = typeof Int8Array === "function";
 	const isSymbolIteratorSupported = (areSymbolsSupported && typeof Symbol.iterator === "symbol");
 	const isSymbolToStringTagSupported = (areSymbolsSupported && typeof Symbol.toStringTag === "symbol");
+	
+	const TypedArray = (areTypedArraysSupported ? Object.getPrototypeOf(Int8Array) : null);
+	const TypedArrayPrototype = (areTypedArraysSupported ? TypedArray.prototype : null);
 	
 	function getErrorMessage(errorType, parameterName, readableTypeDescription) {
 		return `An instance of '${errorType.name}' was about to be thrown but the error constructor was called incorrectly: argument ${parameterName} was not ${readableTypeDescription}.`;
@@ -366,6 +370,18 @@
 			return typeof value === "symbol";
 		};
 	
+	typeChecking.isTypedArray =
+		function isTypedArray(arg) {
+			if(typeof arg !== "object" || arg === null) return false;
+			try {
+				Reflect.getOwnPropertyDescriptor(TypedArrayPrototype, "byteLength").get.call(arg);
+				return true;
+			}
+			catch(_) {
+				return false;
+			}
+		};
+	
 	typeChecking.isWeakMap =
 		function isWeakMap(o) {
 			try {
@@ -427,6 +443,7 @@
 		'StrictlyPositiveNumber': "a strictly positive number",
 		'String': "a string",
 		'Symbol': "a symbol",
+		'TypedArray': "a typed array",
 		'WeakMap': "a 'WeakMap' object",
 		'WeakSet': "a 'WeakSet' object",
 	};

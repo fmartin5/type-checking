@@ -220,7 +220,8 @@
 		if(typeof x !== "function") return false;
 		try {
 			return String.prototype.startsWith.call(Function.prototype.toString.call(x), "function*");
-		} catch(_) {
+		}
+		catch(_) {
 			return false;
 		}
 	};

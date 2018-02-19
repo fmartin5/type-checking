@@ -574,6 +574,23 @@ suite("@module typeChecking", function () {
 		
 	});
 	
+	suite("assertions", function () {
+		
+		test("@function .assert", function () {
+			assert.doesNotThrow(function(){ tc.assert(true); });
+			assert.ok(tc.assert(true) === undefined);
+			assert.throws(function(){ tc.assert(); }, /boolean/i);
+			assert.throws(function(){ tc.assert(false, "an error occured"); }, /an error occured/i);
+		});
+		
+		test("@function .AssertionError", function () {
+			const ae = new tc.AssertionError("an error occured");
+			assert.ok(ae instanceof Error);
+			assert.ok(ae instanceof tc.AssertionError);
+			assert.ok(ae.name === "AssertionError");
+		});
+	});
+	
 	suite("expectations", function () {
 		
 		test("@function .expectInteger", function () {

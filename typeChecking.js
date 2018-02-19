@@ -76,6 +76,42 @@
 		return `An instance of '${errorType.name}' was about to be thrown but the error constructor was called incorrectly: argument ${parameterName} was not ${readableTypeDescription}.`;
 	}
 	
+	function AssertionError(message="") {
+		if(typeof message !== "string") {
+			// Do not modify the 'stack' property in this case.
+			throw new TypeError(getErrorMessage(AssertionError, "message", "a string"));
+		}
+		this.message = message;
+		if(typeof Error.captureStackTrace === "function") {
+			Error.captureStackTrace(this, AssertionError);
+		}
+	}
+	AssertionError.prototype = Object.create(Error.prototype);
+	AssertionError.prototype.name = "AssertionError";
+
+	typeChecking.AssertionError = AssertionError;
+	
+	// @param {string} [message]
+	// @param {function} [thrower] - A function that should not show up in the stack trace of the generated error.
+	function throwNewAssertionError(message="", thrower) {
+		if(typeof message !== "string") {
+			// Do not attempt to modify the 'stack' property in this case.
+			throw new TypeError(getErrorMessage(AssertionError, "message", "a string"));
+		}
+		const error = new typeChecking.AssertionError(message);
+		if("1" in arguments) {
+			if(typeof thrower !== "function") {
+				throw new TypeError(getErrorMessage(TypeError, "thrower", "a function"));
+			}
+			if(typeof Error.captureStackTrace === "function") {
+				Error.captureStackTrace(error, thrower);
+			}
+		}
+		throw error;
+	}
+	
+	typeChecking.throwNewAssertionError = throwNewAssertionError;
+	
 	// @param {string} typeDescription - A non-empty and preferably readable description of the type which was expected.
 	// @param {function} [thrower] - A function that should not show up in the stack trace of the generated error.
 	function throwNewTypeError(typeDescription, thrower) {
@@ -96,6 +132,18 @@
 	}
 	
 	typeChecking.throwNewTypeError = throwNewTypeError;
+	
+	
+	typeChecking.assert =
+		function assert(booleanValue, message="") {
+			if(typeof booleanValue !== "boolean") throwNewTypeError("a boolean value", assert);
+			if(typeof message !== "string") throwNewTypeError("a string", assert);
+			if(assert.disabled) return;
+			if(booleanValue !== true) throwNewAssertionError(message, assert);
+		};
+	
+	typeChecking.assert.disabled = false;
+	
 	
 	typeChecking.isArray =
 		function isArray(x) {

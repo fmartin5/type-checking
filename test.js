@@ -130,6 +130,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isArray(s) === false);
 			assert.ok(tc.isArray(arguments) === false);
 			assert.ok(tc.isArray(emptyArrayLikeObject) === false);
+			assert.ok(tc.isArray(emptyDataView) === false);
 			assert.ok(tc.isArray(emptyFloat32Array) === false);
 			assert.ok(tc.isArray(emptyFunction) === false);
 			assert.ok(tc.isArray(emptyInt8Array) === false);
@@ -146,6 +147,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isArrayBuffer(emptyArrayBuffer));
 			assert.ok(tc.isArrayBuffer(s) === false);
 			assert.ok(tc.isArrayBuffer(arguments) === false);
+			assert.ok(tc.isArrayBuffer(emptyDataView) === false);
 			assert.ok(tc.isArrayBuffer(emptyPlainObject) === false);
 			assert.ok(tc.isArrayBuffer(fakeArrayBuffer) === false);
 			assert.ok(tc.isArrayBuffer(maskedArrayBuffer));
@@ -157,6 +159,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isArrayLike(emptyArray));
 			assert.ok(tc.isArrayLike(s));
 			assert.ok(tc.isArrayLike(arguments));
+			assert.ok(tc.isArrayLike(emptyDataView) === false);
 			assert.ok(tc.isArrayLike(emptyPlainObject) === false);
 			assert.ok(tc.isArrayLike(fakeArray) === false);
 			assert.ok(tc.isArrayLike(maskedArray));
@@ -170,6 +173,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isArrayLikeObject(emptyArray));
 			assert.ok(tc.isArrayLikeObject(s) === false);
 			assert.ok(tc.isArrayLikeObject(arguments));
+			assert.ok(tc.isArrayLikeObject(emptyDataView) === false);
 			assert.ok(tc.isArrayLikeObject(emptyPlainObject) === false);
 			assert.ok(tc.isArrayLikeObject(fakeArray) === false);
 			assert.ok(tc.isArrayLikeObject(maskedArray));

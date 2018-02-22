@@ -42,18 +42,23 @@
 /*eslint-env browser, node */
 
 
-// UMD snippet (without AMD support)
+// UMD snippet (with AMD, NodeJS, and Browser support)
 (function (root, moduleName, moduleExports) {
-	
+	// AMD support
+	if(typeof define === "function" && define.amd) {  
+		define(moduleName, function () {
+			return moduleExports;
+		});
+	}
 	// NodeJS support
-	if(typeof module === "object") {
+	else if(typeof module === "object") {
 		if(typeof module.exports === "object") {
 			module.exports = moduleExports;
 		}
 		else module = moduleExports; // eslint-disable-line no-global-assign
 	}
 	// Browser support
-	else if(root && typeof root === "object") {
+	else if(typeof root === "object" && root !== null) {
 		root[moduleName] = moduleExports;
 	}
 	else throw new Error("Cannot export.");

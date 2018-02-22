@@ -1,6 +1,6 @@
 {
   "name": "@fmartin5/type-checking",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Runtime type checking and type assertion library for Node and the browser",
   "keywords": [
     "assertion",

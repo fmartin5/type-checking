@@ -77,6 +77,21 @@
 	const TypedArray = (areTypedArraysSupported ? Object.getPrototypeOf(Int8Array) : null);
 	const TypedArrayPrototype = (areTypedArraysSupported ? TypedArray.prototype : null);
 	
+	const NDEBUG = getNdebug();
+	
+	function getNdebug() {
+		const platform = (
+			(typeof process === "object" && typeof process.env === "object") ? "node" :
+			(typeof java === "object" && typeof java.lang === "object") ? "jjs" :
+			"browser"
+		);
+		switch(platform) {
+			case "node": return !!(process.env.NODE_NDEBUG);
+			case "jjs": return !!(java.lang.System.getProperty("nashorn.ndebug"));
+			default: return false;
+		}
+	}
+	
 	function getErrorMessage(errorType, parameterName, readableTypeDescription) {
 		return `An instance of '${errorType.name}' was about to be thrown but the error constructor was called incorrectly: argument ${parameterName} was not ${readableTypeDescription}.`;
 	}
@@ -147,7 +162,7 @@
 			if(booleanValue !== true) throwNewAssertionError(message, assert);
 		};
 	
-	typeChecking.assert.disabled = false;
+	typeChecking.assert.disabled = NDEBUG;
 	
 	
 	typeChecking.isArray =

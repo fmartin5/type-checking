@@ -4,6 +4,9 @@ Passing arrow functions (“lambdas”) to Mocha is discouraged. Due to the lexi
 */
 'use strict';
 
+/* eslint-env mocha, node */
+/* eslint-disable brace-style */
+/* eslint-disable no-unused-vars */
 
 const assert = require("assert");
 const tc = require("./typeChecking");
@@ -245,8 +248,8 @@ suite("@module typeChecking", function () {
 		
 		test("@function .isIterable", function () {
 			assert.ok(tc.isIterable(emptyArray));
-			assert.ok(tc.isIterable(emptyArrayBuffer) ===  false);
-			assert.ok(tc.isIterable(emptyArrayLikeObject) ===  false);
+			assert.ok(tc.isIterable(emptyArrayBuffer) === false);
+			assert.ok(tc.isIterable(emptyArrayLikeObject) === false);
 			assert.ok(tc.isIterable(emptyFunction) === false);
 			assert.ok(tc.isIterable(emptyGeneratorFunction) === false);
 			assert.ok(tc.isIterable(emptyMap));

@@ -588,6 +588,13 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.assert(true) === undefined);
 			assert.throws(function(){ tc.assert(); }, /boolean/i);
 			assert.throws(function(){ tc.assert(false, "an error occured"); }, /an error occured/i);
+
+			tc.assert.disabled = true;
+			
+			assert.doesNotThrow(function(){ tc.assert(true); });
+			assert.doesNotThrow(function(){ tc.assert(false, "an error occured"); });
+			
+			tc.assert.disabled = false;
 		});
 		
 		test("@function .AssertionError", function () {

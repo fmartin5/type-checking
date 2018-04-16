@@ -13,12 +13,14 @@ Runtime type checking and type assertion library for Node and the browser
 - Cross-realm/iframe support (i.e., predicates should remain correct across different realms).
 - Does not get easily fooled by the value of the `Symbol.toStringTag` property.
 - Handles `-0` and `NaN` correctly.
+- Aims to provide readable error messages.
+- Does not rely on Symbol.toStringTag
+- You can easily disable `typeChecking.assert()` (but not `.expect()`) for production:
+	in Node: by setting the NODE_NDEBUG environment variable;
+	in Nashorn: by setting the "nashorn.ndebug" system property.
 - Does not aim to cover any DOM API type.
 - Does not aim to cover complex constrained string types like email address etc.
 - Does not aim to offer custom type constructor.
-- Aims to provide readable error messages.
-
-- Does not rely on Symbol.toStringTag
 
 ## Installation
 ```sh

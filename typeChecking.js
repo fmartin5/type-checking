@@ -39,7 +39,7 @@
 
 
 /*eslint indent: "off" */
-/*eslint-env amd, browser, node */
+/*eslint-env amd, browser, nashorn, node */
 
 
 // UMD snippet (with AMD, NodeJS, and Browser support)

@@ -1,7 +1,7 @@
 /**
  * @fileoverview typeChecking.js - A runtime type checking and assertion library.
  *
- * @formats browser script tag, nodejs module
+ * @formats amd module, browser script, nodejs module
  *
  * @language syntax: es5 +const +rest - globals: es6 +console
  *

@@ -197,6 +197,12 @@
 			&& x !== null && Number.isSafeInteger(x.length) && x.length >= 0;
 		};
 	
+	typeChecking.isBigInt =
+		function isBigInt(x) {
+			return typeof x === "bigint";
+		};
+	
+	
 	typeChecking.isBoolean =
 		function isBoolean(x) {
 			return typeof x === "boolean";
@@ -296,6 +302,11 @@
 			return typeChecking.isArrayLikeObject(value) && !typeChecking.isImmutable(value);
 		};
 	
+	typeChecking.isNegativeBigInt =
+		function isNegativeBigInt(value) {
+			return typeof value === "bigint" && value <= BigInt(0);
+		};
+	
 	typeChecking.isNegativeInteger =
 		function isNegativeInteger(value) {
 			return typeof value === "number" && value % 1 === 0
@@ -337,6 +348,12 @@
 			return typeof value === "number";
 		};
 	
+	typeChecking.isPositiveBigInt =
+		function isPositiveBigInt(value) {
+			return typeof value === "bigint" && value >= BigInt(0);
+		};
+	
+	
 	typeChecking.isPositiveInteger =
 		function isPositiveInteger(value) {
 			return typeof value === "number" && value % 1 === 0
@@ -350,7 +367,7 @@
 	
 	typeChecking.isPrimitive =
 		function isPrimitive(x) {
-			return x === null || typeof x === "undefined" || typeof x === "boolean" || typeof x === "number" || typeof x === "string" || typeof x === "symbol";
+			return x === null || typeof x === "undefined" || typeof x === "bigint" || typeof x === "boolean" || typeof x === "number" || typeof x === "string" || typeof x === "symbol";
 		};
 	
 	typeChecking.isRegExp =
@@ -407,6 +424,11 @@
 			}
 		};
 	
+	typeChecking.isStrictlyNegativeBigInt =
+		function isStrictlyNegativeBigInt(value) {
+			return typeof value === "bigint" && value < BigInt(0);
+		};
+	
 	typeChecking.isStrictlyNegativeInteger =
 		function isStrictlyNegativeInteger(value) {
 			return typeof value === "number" && value % 1 === 0
@@ -416,6 +438,11 @@
 	typeChecking.isStrictlyNegativeNumber =
 		function isStrictlyNegativeNumber(value) {
 			return typeof value === "number" && value < 0;
+		};
+	
+	typeChecking.isStrictlyPositiveBigInt =
+		function isStrictlyPositiveBigInt(value) {
+			return typeof value === "bigint" && value > BigInt(0);
 		};
 	
 	typeChecking.isStrictlyPositiveInteger =
@@ -478,6 +505,7 @@
 		'ArrayBuffer': "an 'ArrayBuffer' object",
 		'ArrayLike': "an array-like value",
 		'ArrayLikeObject': "an array-like object",
+		'BigInt': "a BigInt integer",
 		'Boolean': "a boolean",
 		'Date': "a 'Date' object",
 		'DuckOf': "a duck of the given 'duckType'",
@@ -489,6 +517,7 @@
 		'Map': "a 'Map' object",
 		
 		'MutableArrayLikeObject': "a mutable array-like object",
+		'NegativeBigInt': "a negative BigInt integer",
 		'NegativeInteger': "a negative integer",
 		'NegativeNumber': "a negative number",
 		'NonEmptyArray': "a non-empty Array object",
@@ -497,6 +526,7 @@
 		'NonNull': "neither 'null' nor 'undefined'",
 		'NonPrimitive': "a non-primitive value",
 		'Number': "a number",
+		'PositiveBigInt': "a positive BigInt integer",
 		'PositiveInteger': "a positive integer",
 		'PositiveNumber': "a positive number",
 		
@@ -506,8 +536,10 @@
 		'SafeInteger': "a safe integer",
 		'Set': "a 'Set' object",
 		'SharedArrayBuffer': "a 'SharedArrayBuffer' object",
+		'StrictlyNegativeBigInt': "a strictly negative BigInt integer",
 		'StrictlyNegativeInteger': "a strictly negative integer",
 		'StrictlyNegativeNumber': "a strictly negative number",
+		'StrictlyPositiveBigInt': "a strictly positive BigInt integer",
 		'StrictlyPositiveInteger': "a strictly positive integer",
 		'StrictlyPositiveNumber': "a strictly positive number",
 		'String': "a string",

@@ -5,6 +5,7 @@
     },
     "globals": {
         "console": false,
+        "BigInt": false,
         "SharedArrayBuffer": false
     },
     "rules": {

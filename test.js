@@ -60,6 +60,7 @@ suite("@module typeChecking", function () {
 		
 		const fakeArray = {[Symbol.toStringTag]: "Array"};
 		const fakeArrayBuffer = {[Symbol.toStringTag]: "ArrayBuffer"};
+		const fakeBigInt = {[Symbol.toStringTag]: "BigInt"};
 		const fakeBoolean = {[Symbol.toStringTag]: "Boolean"};
 		const fakeDataView = {[Symbol.toStringTag]: "DataView"};
 		const fakeDate = {[Symbol.toStringTag]: "Date"};
@@ -105,6 +106,10 @@ suite("@module typeChecking", function () {
 		const foreignEmptyString = vm.runInContext("('')", sandbox);
 		const foreignRexExpPrototype = vm.runInContext("RegExp.prototype", sandbox);
 		
+		const foreignMinusOneBigInt = vm.runInContext("(-1n)", sandbox);
+		const foreignOneBigInt = vm.runInContext("(1n)", sandbox);
+		const foreignZeroBigInt = vm.runInContext("(0n)", sandbox);
+		
 		const maskedArray = Object.defineProperty([], Symbol.toStringTag, {"value": "Foo"});
 		const maskedArrayBuffer = Object.defineProperty(new ArrayBuffer(), Symbol.toStringTag, {"value": "Foo"});
 		const maskedBoolean = Object.defineProperty(new Boolean(), Symbol.toStringTag, {"value": "Foo"});
@@ -125,6 +130,9 @@ suite("@module typeChecking", function () {
 		const maskedWeakSet = Object.defineProperty(new WeakSet(), Symbol.toStringTag, {"value": "Foo"});
 		
 		const s = "abc";
+		const minusOneBigInt = BigInt(-1);
+		const oneBigInt = BigInt(1);
+		const zeroBigInt = BigInt(0);
 		
 		test("@function .isArray", function () {
 			assert.ok(tc.isArray(arrayObject) === false);
@@ -184,6 +192,29 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isArrayLikeObject(foreignEmptyArray));
 			assert.ok(tc.isArrayLikeObject(foreignEmptyArrayLikeObject));
 			assert.ok(tc.isArrayLikeObject(foreignEmptyString) === false);
+		});
+		
+		test("@function .isBigInt", function () {
+			assert.ok(tc.isBigInt(zeroBigInt));
+			assert.ok(tc.isBigInt(oneBigInt));
+			assert.ok(tc.isBigInt(foreignMinusOneBigInt));
+			assert.ok(tc.isBigInt(foreignOneBigInt));
+			assert.ok(tc.isBigInt(foreignZeroBigInt));
+			
+			assert.ok(tc.isBigInt("0n") === false);
+			assert.ok(tc.isBigInt("-0n") === false);
+			assert.ok(tc.isBigInt("1n") === false);
+			assert.ok(tc.isBigInt("-1n") === false);
+			assert.ok(tc.isBigInt(Infinity) === false);
+			assert.ok(tc.isBigInt(-Infinity) === false);
+			assert.ok(tc.isBigInt(0) === false);
+			assert.ok(tc.isBigInt(-0) === false);
+			assert.ok(tc.isBigInt(1) === false);
+			assert.ok(tc.isBigInt(-1) === false);
+			assert.ok(tc.isBigInt(fakeBigInt) === false);
+			assert.ok(tc.isBigInt(null) === false);
+			assert.ok(tc.isBigInt(undefined) === false);
+			assert.ok(tc.isBigInt(NaN) === false);
 		});
 		
 		test("@function .isBoolean", function () {
@@ -279,6 +310,28 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isMap(weakMapObject) === false);
 			
 			assert.ok(tc.isMap(foreignEmptyMap));
+		});
+		
+		test("@function .isNegativeBigInt", function () {
+			assert.ok(tc.isNegativeBigInt(minusOneBigInt));
+			assert.ok(tc.isNegativeBigInt(foreignMinusOneBigInt));
+			assert.ok(tc.isNegativeBigInt(foreignZeroBigInt));
+			
+			assert.ok(tc.isNegativeBigInt(oneBigInt) === false);
+			assert.ok(tc.isNegativeBigInt(foreignOneBigInt) === false);
+			assert.ok(tc.isNegativeBigInt("0n") === false);
+			assert.ok(tc.isNegativeBigInt("1n") === false);
+			assert.ok(tc.isNegativeBigInt("-1n") === false);
+			assert.ok(tc.isNegativeBigInt(Infinity) === false);
+			assert.ok(tc.isNegativeBigInt(-Infinity) === false);
+			assert.ok(tc.isNegativeBigInt(0) === false);
+			assert.ok(tc.isNegativeBigInt(-0) === false);
+			assert.ok(tc.isNegativeBigInt(1) === false);
+			assert.ok(tc.isNegativeBigInt(-1) === false);
+			assert.ok(tc.isNegativeBigInt(fakeBigInt) === false);
+			assert.ok(tc.isNegativeBigInt(null) === false);
+			assert.ok(tc.isNegativeBigInt(undefined) === false);
+			assert.ok(tc.isNegativeBigInt(NaN) === false);
 		});
 		
 		test("@function .isNegativeInteger", function () {
@@ -382,6 +435,29 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isNumber("") === false);
 		});
 		
+		test("@function .isPositiveBigInt", function () {
+			assert.ok(tc.isPositiveBigInt(oneBigInt));
+			assert.ok(tc.isPositiveBigInt(foreignOneBigInt));
+			assert.ok(tc.isPositiveBigInt(zeroBigInt));
+			assert.ok(tc.isPositiveBigInt(foreignZeroBigInt));
+			
+			assert.ok(tc.isPositiveBigInt(minusOneBigInt) === false);
+			assert.ok(tc.isPositiveBigInt(foreignMinusOneBigInt) === false);
+			assert.ok(tc.isPositiveBigInt("0n") === false);
+			assert.ok(tc.isPositiveBigInt("1n") === false);
+			assert.ok(tc.isPositiveBigInt("-1n") === false);
+			assert.ok(tc.isPositiveBigInt(Infinity) === false);
+			assert.ok(tc.isPositiveBigInt(-Infinity) === false);
+			assert.ok(tc.isPositiveBigInt(0) === false);
+			assert.ok(tc.isPositiveBigInt(-0) === false);
+			assert.ok(tc.isPositiveBigInt(1) === false);
+			assert.ok(tc.isPositiveBigInt(-1) === false);
+			assert.ok(tc.isPositiveBigInt(fakeBigInt) === false);
+			assert.ok(tc.isPositiveBigInt(null) === false);
+			assert.ok(tc.isPositiveBigInt(undefined) === false);
+			assert.ok(tc.isPositiveBigInt(NaN) === false);
+		});
+		
 		test("@function .isPositiveInteger", function () {
 			assert.ok(tc.isPositiveInteger(0));
 			assert.ok(tc.isPositiveInteger(-0) === false);
@@ -457,6 +533,29 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isSet(foreignEmptySet));
 		});
 		
+		test("@function .isStrictlyNegativeBigInt", function () {
+			assert.ok(tc.isStrictlyNegativeBigInt(minusOneBigInt));
+			assert.ok(tc.isStrictlyNegativeBigInt(foreignMinusOneBigInt));
+			
+			assert.ok(tc.isStrictlyNegativeBigInt(oneBigInt) === false);
+			assert.ok(tc.isStrictlyNegativeBigInt(zeroBigInt) === false);
+			assert.ok(tc.isStrictlyNegativeBigInt(foreignOneBigInt) === false);
+			assert.ok(tc.isStrictlyNegativeBigInt(foreignZeroBigInt) === false);
+			assert.ok(tc.isStrictlyNegativeBigInt("0n") === false);
+			assert.ok(tc.isStrictlyNegativeBigInt("1n") === false);
+			assert.ok(tc.isStrictlyNegativeBigInt("-1n") === false);
+			assert.ok(tc.isStrictlyNegativeBigInt(Infinity) === false);
+			assert.ok(tc.isStrictlyNegativeBigInt(-Infinity) === false);
+			assert.ok(tc.isStrictlyNegativeBigInt(0) === false);
+			assert.ok(tc.isStrictlyNegativeBigInt(-0) === false);
+			assert.ok(tc.isStrictlyNegativeBigInt(1) === false);
+			assert.ok(tc.isStrictlyNegativeBigInt(-1) === false);
+			assert.ok(tc.isStrictlyNegativeBigInt(fakeBigInt) === false);
+			assert.ok(tc.isStrictlyNegativeBigInt(null) === false);
+			assert.ok(tc.isStrictlyNegativeBigInt(undefined) === false);
+			assert.ok(tc.isStrictlyNegativeBigInt(NaN) === false);
+		});
+		
 		test("@function .isStrictlyNegativeInteger", function () {
 			assert.ok(tc.isStrictlyNegativeInteger(0) === false);
 			assert.ok(tc.isStrictlyNegativeInteger(-0) === false);
@@ -499,6 +598,29 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.isStrictlyNegativeNumber(null) === false);
 			assert.ok(tc.isStrictlyNegativeNumber(undefined) === false);
 			assert.ok(tc.isStrictlyNegativeNumber("") === false);
+		});
+		
+		test("@function .isStrictlyPositiveBigInt", function () {
+			assert.ok(tc.isStrictlyPositiveBigInt(oneBigInt));
+			assert.ok(tc.isStrictlyPositiveBigInt(foreignOneBigInt));
+			
+			assert.ok(tc.isStrictlyPositiveBigInt(minusOneBigInt) === false);
+			assert.ok(tc.isStrictlyPositiveBigInt(foreignMinusOneBigInt) === false);
+			assert.ok(tc.isStrictlyPositiveBigInt(zeroBigInt) === false);
+			assert.ok(tc.isStrictlyPositiveBigInt(foreignZeroBigInt) === false);
+			assert.ok(tc.isStrictlyPositiveBigInt("0n") === false);
+			assert.ok(tc.isStrictlyPositiveBigInt("1n") === false);
+			assert.ok(tc.isStrictlyPositiveBigInt("-1n") === false);
+			assert.ok(tc.isStrictlyPositiveBigInt(Infinity) === false);
+			assert.ok(tc.isStrictlyPositiveBigInt(-Infinity) === false);
+			assert.ok(tc.isStrictlyPositiveBigInt(0) === false);
+			assert.ok(tc.isStrictlyPositiveBigInt(-0) === false);
+			assert.ok(tc.isStrictlyPositiveBigInt(1) === false);
+			assert.ok(tc.isStrictlyPositiveBigInt(-1) === false);
+			assert.ok(tc.isStrictlyPositiveBigInt(fakeBigInt) === false);
+			assert.ok(tc.isStrictlyPositiveBigInt(null) === false);
+			assert.ok(tc.isStrictlyPositiveBigInt(undefined) === false);
+			assert.ok(tc.isStrictlyPositiveBigInt(NaN) === false);
 		});
 		
 		test("@function .isStrictlyPositiveInteger", function () {

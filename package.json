@@ -20,7 +20,7 @@
   },
   "main": "typeChecking.js",
   "scripts": {
-    "test": "eslint typeChecking.js --rulesdir eslint_rules && echo '✔  Your code looks good.' && mocha --ui=tdd"
+    "test": "eslint ./*.js --rulesdir eslint_rules && echo '✔  Your code looks good.' && mocha --ui=tdd"
   },
   "repository": {
     "type": "git",

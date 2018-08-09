@@ -45,7 +45,7 @@
 // UMD snippet (with AMD, NodeJS, and Browser support)
 (function (root, moduleName, moduleExports) {
 	// AMD support
-	if(typeof define === "function" && define.amd) {  
+	if(typeof define === "function" && define.amd) {
 		define(moduleName, function () {
 			return moduleExports;
 		});
@@ -108,7 +108,7 @@
 	}
 	AssertionError.prototype = Object.create(Error.prototype);
 	AssertionError.prototype.name = "AssertionError";
-
+	
 	typeChecking.AssertionError = AssertionError;
 	
 	// @param {string} [message]

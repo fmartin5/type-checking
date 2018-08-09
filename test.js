@@ -6,6 +6,7 @@ Passing arrow functions (“lambdas”) to Mocha is discouraged. Due to the lexi
 
 /* eslint-env mocha, node */
 /* eslint-disable brace-style */
+/* eslint-disable no-undefined */
 /* eslint-disable no-unused-vars */
 
 const assert = require("assert");
@@ -51,7 +52,7 @@ suite("@module typeChecking", function () {
 		const numberObject = Object.create(Number.prototype);
 		const regExpObject = Object.create(RegExp.prototype);
 		const setObject = Object.create(Set.prototype);
-// 		const sharedArrayBufferObject = Object.create(SharedArrayBuffer.prototype);
+		// 		const sharedArrayBufferObject = Object.create(SharedArrayBuffer.prototype);
 		const stringObject = Object.create(String.prototype);
 		const typedArrayObject = Object.create(Object.getPrototypeOf(Int8Array).prototype);
 		const uint8ArrayObject = Object.create(Uint8Array.prototype);
@@ -588,7 +589,7 @@ suite("@module typeChecking", function () {
 			assert.ok(tc.assert(true) === undefined);
 			assert.throws(function(){ tc.assert(); }, /boolean/i);
 			assert.throws(function(){ tc.assert(false, "an error occured"); }, /an error occured/i);
-
+			
 			tc.assert.disabled = true;
 			
 			assert.doesNotThrow(function(){ tc.assert(true); });
